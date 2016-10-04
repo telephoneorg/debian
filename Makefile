@@ -1,38 +1,37 @@
-USER = sip-li 
+USER = sip-li
 PROJECT = debian
 TAG = $(shell git tag | sort -n | tail -1)
 
-BIN_FILES = $(shell ls bin)
-
+ROOTFS = base-repo/build/rootfs.tar.gz
 
 init:
-    @cd base-repo && ./init.sh
+	@cd base-repo && ./init.sh
 
 build:
-    @cd base-repo && ./build.sh
+	@cd base-repo && ./build.sh
 
 push:
-    @cd base-repo && ./push.sh
+	@cd base-repo && ./push.sh
 
 clean:
-    @rm -rf base-repo/build/*
+	@rm -rf base-repo/build/*
+
+init-tag:
+	@git tag -a v1.0
 
 bump-tag:
-    @git tag -a $(shell echo $(TAG) | awk -F. '1{$$NF+=1; OFS="."; print $$0}') -m "New Release"
+	@git tag -a $(shell echo $(TAG) | awk -F. '1{$$NF+=1; OFS="."; print $$0}') -m "New Release"
 
 commit-all:
-    @git add .
-    @git commit
-
-push:
-    @git push origin master
+	@git add .
+	@git commit
 
 release:
-    @-git push origin $(TAG)
-    @github-release release --user $(USER) --repo $(PROJECT) --tag $(TAG)
+	@-git push origin $(TAG)
+	@github-release release --user $(USER) --repo $(PROJECT) --tag $(TAG)
 
 upload-release:
-    @for f in $(BIN_FILES); do github-release upload --user $(USER) --repo $(PROJECT) --tag $(TAG) --name "$$f" --file "bin/$$f"; done
+	echo github-release upload --user $(USER) --repo $(PROJECT) --tag $(TAG) --name $(shell basename $(ROOTFS)) --file $(ROOTFS)
 
 default: build
 
