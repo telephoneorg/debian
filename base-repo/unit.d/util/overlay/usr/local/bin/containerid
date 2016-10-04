@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# This script gets the current container id from
+# within a container
+
+get_cid() {
+    basename "$(cat /proc/1/cgroup | grep docker | head -1)"
+}
+
+case "$1" in
+    s|short)
+        (cid=$(get_cid)
+         echo "$cid" | cut -c 1-12)
+        ;;
+     
+    f|full|l|long)
+        get_cid
+        ;;
+     
+    h|help)
+        echo "Usage: $0 {short|full|help}"
+        exit 1
+        ;;
+
+    *)
+        (cid=$(get_cid)
+         echo "$cid" | cut -c 1-12)
+        ;;
+esac
+

@@ -1,0 +1,48 @@
+/* 
+
+This file should only contain packages flagged as Essential and any
+extra dependencies they require.
+
+We resolve the dependencies of the included packages recursively to
+produce a list of packages which are passed to debootstrap to produce a
+bootstrap filesystem capable of installing additional packages via
+apt-get.
+
+Notes:
+
+* Do not rely on bringing in essential packages through dependencies.
+
+* Avoid including "essential" packages which are not really essential
+  for satisfying our goal.
+
+*/
+
+base-files
+base-passwd
+bash                 
+bsdutils             
+coreutils
+debianutils
+dash                 
+diffutils
+dpkg
+e2fsprogs
+findutils            
+grep                 
+gzip                 
+hostname             
+login
+mount
+perl-base
+tar
+util-linux
+sed
+libc-bin
+netcat
+libncursesw5
+libprocps3
+procps
+
+/* non-essential packages needed for bootstrapping */
+mawk            /* needed to provide awk to base-files */
+sysv-rc         /* needed by dpkg for update-rc.d */

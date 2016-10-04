@@ -1,0 +1,4 @@
+#!/bin/bash -e
+
+cp -rT /etc/skel /root
+

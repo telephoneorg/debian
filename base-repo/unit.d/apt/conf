@@ -1,0 +1,28 @@
+#!/bin/bash -e
+
+CODENAME=$(cat /etc/debian_codename)
+
+cat >/etc/apt/sources.list.d/sources.list<<EOF
+deb http://ftp.us.debian.org/debian $CODENAME main
+# deb http://ftp.us.debian.org/debian $CODENAME contrib
+# deb http://ftp.us.debian.org/debian $CODENAME non-free
+EOF
+
+if [ "$CODENAME" != "sid" ]; then
+cat >/etc/apt/sources.list.d/security.sources.list<<EOF
+deb http://security.debian.org/ $CODENAME/updates main
+# deb http://security.debian.org/ $CODENAME/updates contrib
+# deb http://security.debian.org/ $CODENAME/updates non-free
+EOF
+fi
+
+# prevent initscript from running during install/update
+echo "exit 101" > /usr/sbin/policy-rc.d
+chmod +x /usr/sbin/policy-rc.d
+
+dpkg-divert --local --rename --add /sbin/initctl
+ln -sf /bin/true /sbin/initctl
+
+# aggresively clean apt related files
+/usr/local/sbin/apt-clean --aggressive
+

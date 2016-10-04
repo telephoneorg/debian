@@ -1,0 +1,113 @@
+#!/bin/sh
+
+# DESCRIPTION
+# This script is necessary because kubernetes doesn't
+# set the pod hostname to a hostname that's resolvable
+# outside of the pod.
+
+# Kubernetes does however assign pod hostnames that are
+# resolvable from others pods, and the algorithm is
+# simple enough.
+
+# When eval'd or executed, this script links the
+# /usr/local/bin/kube-hostname-wrapper script to a 
+# directory in the beginning of the path, under ~ for 
+# the purposes of wrapping the hostname binary.
+
+# Afterwards, it sets the HOSTNAME environment variable
+# to shortname or longname (fqdn), defaulting to fqdn.
+
+# It also echo's the hostname's short and longname to
+# the /etc/hosts file for both localIP and podIP.
+
+# Finally HOSTNAME is exported so that the current
+# and any subshell just works, this only works if 
+# executing script inside an eval.  Ex: 
+#   eval $(kube-fix-hostname {enable|disable})
+
+# ARGUMENTS
+# n/a
+
+self=$(basename $0)
+selfdir=$(dirname $0)
+name="Kubernetes Hostname-Fix"
+
+link_hostname()
+{
+    echo "Applying $name ..." >&2
+    ln -sf $selfdir/kube-hostname-wrapper $selfdir/hostname
+}
+
+unlink_hostname()
+{
+    echo "Unapplying $name ..." >&2
+    [ -f $selfdir/hostname ] && $(rm -f $selfdir/hostname)
+}
+
+set_hostname_env() {
+    if [ "$KUBERNETES_USE_SHORTNAME" = true ]
+    then
+        HOSTNAME=$(env hostname -s)
+    else
+        HOSTNAME=$(env hostname -f)
+    fi
+}
+
+set_etc_hostname()
+{
+    echo "$HOSTNAME" > /etc/hostname
+}
+
+write_etc_hosts()
+{
+    local ip=$(env hostname -i)
+    local short=$(env hostname -s)
+    local fqdn=$(env hostname -f)
+    clean_etc_hosts
+    if ! cat /etc/hosts | grep --silent $HOSTNAME
+    then
+        cat <<EOF >> /etc/hosts
+127.0.0.1    $fqdn    $short   # added by $self
+$ip    $fqdn    $short # added by $self
+EOF
+    fi
+}
+
+clean_etc_hosts()
+{
+    # it's really hard writing to the open file /etc/hosts
+    # correctly under docker.
+    echo "$(sed "/$self/d" /etc/hosts)" > /etc/hosts
+}
+
+export_hostname()
+{
+    echo "export HOSTNAME=$HOSTNAME"
+}
+
+enable()
+{
+    link_hostname
+    set_hostname_env
+    set_etc_hostname
+    write_etc_hosts
+    export_hostname
+}
+
+disable() 
+{
+    unlink_hostname
+    set_hostname_env
+    set_etc_hostname
+    clean_etc_hosts
+    export_hostname
+}
+
+if [ "$1" ]
+then
+    "$@"
+else
+    echo "usage: eval \$($self {enable|disable})" >&2
+    exit 1
+fi
+

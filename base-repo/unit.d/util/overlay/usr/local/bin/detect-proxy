@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# usage: eval $(detect-proxy {enable|disable})
+#
+# enable:  for use at the beginning of a build script
+#
+# This script detects whether an apt-cacher-ng proxy
+# is reachable on the bridge-ip port 3142.  If so it's
+# added to the apt.conf.d directory.  
+#
+# Also it detects whether an all purpose proxy is reachable
+# on port 3128 and if so http_proxy is exported in such a way
+# that running eval on the script will export.
+#
+# disable:  for use at the end of a build script
+# 
+# if the file that was previously written to /etc/apt/apt.conf.d
+# still exists, it is removed, also http_proxy is unset in such
+# a way that running eval on the script will unset.
+
+bridge_ip="$(hostname -i | cut -d'.' -f1-3).1"
+conf_file=/etc/apt/apt.conf.d/00-local-proxy
+
+enable()
+{
+    nc -z "$bridge_ip" 3142 && echo "Acquire::http::Proxy \"http://$bridge_ip:3142\";" > "$conf_file"
+    nc -z "$bridge_ip" 3128 && echo "export http_proxy=http://$bridge_ip:3128"
+}
+
+disable()
+{
+    [ -f "$conf_file" ] && rm -f "$conf_file"
+    echo "unset http_proxy"
+}
+
+if [ "$1" ]
+then
+    "$@"
+else
+    echo "usage: eval \$($(basename $0) {enable|disable})"
+    exit 1
+fi
+

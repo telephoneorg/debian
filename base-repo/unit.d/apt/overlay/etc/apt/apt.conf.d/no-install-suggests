@@ -1,0 +1,3 @@
+# Don't install suggests by default
+
+APT::Install-Suggests "false";

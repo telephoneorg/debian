@@ -1,0 +1,25 @@
+#!/bin/bash -e
+
+export RELEASE=${RELEASE:-debian/jessie}
+
+CODENAME=$(basename $RELEASE)
+BASEDIR=/turnkey/tklx/base
+echo $1 |grep -q ^chanko && WORKDIR=$BASEDIR/builder/chankos/$CODENAME
+
+echo -e "
+docker run -it --rm --privileged \
+    -e RELEASE \
+    -e PKGCACHE=$BASEDIR/builder/chankos/$CODENAME/archives \
+    -e CDPATH=.:/turnkey/fab:/turnkey \
+    -v $(dirname $(dirname $(realpath $0))):$BASEDIR \
+    -w ${WORKDIR:-$BASEDIR} \
+    builder $@
+"
+
+docker run -it --rm --privileged \
+    -e RELEASE \
+    -e PKGCACHE=$BASEDIR/builder/chankos/$CODENAME/archives \
+    -e CDPATH=.:/turnkey/fab:/turnkey \
+    -v $(dirname $(dirname $(realpath $0))):$BASEDIR \
+    -w ${WORKDIR:-$BASEDIR} \
+    builder $@
