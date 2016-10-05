@@ -13,6 +13,6 @@ builder/run chanko-upgrade
 builder/run make clean
 builder/run make
 
-docker build -t $DOCKER_ACCOUNT/${RELEASE/\//:} .
-docker run -i --rm $DOCKER_ACCOUNT/${RELEASE/\//:} bash -lc env
+# docker build -t $DOCKER_ACCOUNT/${RELEASE/\//:} .
+# docker run -i --rm $DOCKER_ACCOUNT/${RELEASE/\//:} bash -lc env
 

@@ -10,6 +10,9 @@ init:
 build:
 	@cd base-repo && ./build.sh
 
+build-docker:
+	@cd base-repo && ./build-docker.sh
+
 push:
 	@cd base-repo && ./push.sh
 
@@ -17,7 +20,8 @@ clean:
 	@rm -rf base-repo/build/*
 
 init-tag:
-	@git tag -a v1.0
+	@git tag -a v1.0 -m "Initial"
+	@git push origin v1.0
 
 bump-tag:
 	@git tag -a $(shell echo $(TAG) | awk -F. '1{$$NF+=1; OFS="."; print $$0}') -m "New Release"
@@ -31,7 +35,7 @@ release:
 	@github-release release --user $(USER) --repo $(PROJECT) --tag $(TAG)
 
 upload-release:
-	echo github-release upload --user $(USER) --repo $(PROJECT) --tag $(TAG) --name $(shell basename $(ROOTFS)) --file $(ROOTFS)
+	@github-release upload --user $(USER) --repo $(PROJECT) --tag $(TAG) --name $(shell basename $(ROOTFS)) --file $(ROOTFS)
 
 default: build
 
