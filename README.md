@@ -161,3 +161,5 @@ I ran `apt-get install curl` and curl isn't working for sites with TLS
 
 This minimal distribution has some changes made to apt.conf.d that alter apt-get's behavior.  Suggested and reccomended packages are no longer installed by default, and closely equivalent to running `apt-get install --no-install-reccomends <pkg>`.  Therefore you need to be more explicit if what you are installing depends on packages that are only reccomended or suggested.  In the case of curl, you can fix this by issuing `apt-get install -y curl ca-certificates` in order to pull in the root ca's and also setup requirements such as gnutls.
 
+
+
