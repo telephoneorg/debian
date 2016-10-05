@@ -14,7 +14,9 @@ build-docker:
 	@cd base-repo && ./build-docker.sh
 
 push:
-	@cd base-repo && ./push.sh
+	git add .
+	git commit
+	git push origin master
 
 clean:
 	@rm -rf base-repo/build/*

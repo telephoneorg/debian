@@ -1,6 +1,14 @@
+[ -z "$PS1" ] && return
+
 if [ $TERM != dumb ]
 then
-    eval "$(dircolors -b)"
+    if [ -f "/etc/dircolors" ] ; then
+        eval $(dircolors -b /etc/dircolors)
+
+        if [ -f "$HOME/.dircolors" ] ; then
+            eval $(dircolors -b $HOME/.dircolors)
+        fi
+    fi
 
     c_rst='\[\e[0m\]'
     c_c='\[\e[36m\]'
@@ -16,5 +24,6 @@ else
     PS1="\$(hostname -s) \W \$ "
 fi
 
-export LS_COLORS
+unset c_rst c_c c_g
+export PS LS_COLORS
 
