@@ -4,15 +4,13 @@
 #
 # usage: cmd {link|unlink} <app-name>
 #
-# If PERSISTENT_STORAGE_ENABLED is true, this script 
-# creates a subdirectory under the volume mount path 
-# named after the current container's short hostname,
-# then links it to the data path.  It also fixes the
-# ownership of the volume so that it doesn't have to
-# be done in the entrypoint script.
+# this script creates a subdirectory under the volume mount path named after
+# the current container's short hostname, then links it to the data path. It
+# also fixes the ownership of the volume so that it doesn't have to be done in
+# the entrypoint script.
 #
-# If PERSISTENT_STORAGE_ENABLED if false, it only 
-# ensures that the data_path exists
+# If PERSISTENT_STORAGE_ENABLED if false, it only ensures that the data_path
+# exists
 #
 # volume_path: /volumes/$app/$(hostname -s)
 # data_path: /data/$app
@@ -35,17 +33,16 @@ get_user()
 
 link_volume()
 {
-    if [ "$PERSISTENT_STORAGE_ENABLED" = true ]
-    then
-        echo "Persistent storage enabled
-        host: $short
-        linking: $volume_path -> $data_path
-        " >&2
-        [ ! -d "$volume_path" ] && mkdir -p "$volume_path"
-        [ ! -L "$data_path" ] && ln -sf "$volume_path" "$data_path"
-    else
-        mkdir -p "$data_path"
-    fi
+    echo "Persistent storage enabled
+    host: $short
+    linking: $volume_path -> $data_path
+    " >&2
+    # If data path exists and is empty delete it so a link can be made
+    [ $(find "$data_path" -maxdepth 0 -empty 2> /dev/null) ] && rm -rf "$data_path"
+    # if it doesn't exist create the volume _path
+    [ ! -d "$volume_path" ] && mkdir -p "$volume_path"
+    # if the link doesn't exist create the link from volume_path to data_path
+    [ ! -L "$data_path" ] && ln -sf "$volume_path" "$data_path"
 }
 
 unlink_volume()
