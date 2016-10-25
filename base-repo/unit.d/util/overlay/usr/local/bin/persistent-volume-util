@@ -9,9 +9,6 @@
 # also fixes the ownership of the volume so that it doesn't have to be done in
 # the entrypoint script.
 #
-# If PERSISTENT_STORAGE_ENABLED if false, it only ensures that the data_path
-# exists
-#
 # volume_path: /volumes/$app/$(hostname -s)
 # data_path: /data/$app
 
