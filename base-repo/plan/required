@@ -20,6 +20,7 @@ Notes:
 base-files
 base-passwd
 bash                 
+bash-completion
 bsdutils             
 coreutils
 debianutils
@@ -38,6 +39,7 @@ tar
 util-linux
 sed
 libc-bin
+netbase
 netcat
 libncursesw5
 libprocps3

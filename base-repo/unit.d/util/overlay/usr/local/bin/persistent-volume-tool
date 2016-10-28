@@ -1,0 +1,85 @@
+#!/bin/sh
+
+# persistent volume util
+#
+# usage: cmd {link|unlink} <app-name>
+#
+# this script creates a subdirectory under the volume mount path named after
+# the current container's short hostname, then links it to the data path. It
+# also fixes the ownership of the volume so that it doesn't have to be done in
+# the entrypoint script.
+#
+# volume_path: /volumes/$app/$(hostname -s)
+# data_path: /data/$app
+
+app="$2"
+short=$(env hostname -s)
+volume_path="/volumes/$app/$short"
+data_path="/data/$app"
+
+get_user()
+{
+    if getent passwd "$app" > /dev/null 2>&1
+    then
+        echo "$app"
+    elif getent passwd "$(basename $HOME)" > /dev/null 2>&1
+    then
+        basename "$HOME"
+    fi
+}
+
+link_volume()
+{
+    echo "Persistent storage enabled
+    host: $short
+    linking: $volume_path -> $data_path
+    " >&2
+    # If data path exists and is empty delete it so a link can be made
+    [ $(find "$data_path" -maxdepth 0 -empty 2> /dev/null) ] && rm -rf "$data_path"
+    # if it doesn't exist create the volume _path
+    [ ! -d "$volume_path" ] && mkdir -p "$volume_path"
+    # if the link doesn't exist create the link from volume_path to data_path
+    [ ! -L "$data_path" ] && ln -sf "$volume_path" "$data_path"
+}
+
+unlink_volume()
+{
+    if [ "$PERSISTENT_STORAGE_ENABLED" = true ]
+    then
+        echo "Persistent storage disabled
+        host: $short
+        unlinking: $volume_path -> $data_path
+        " >&2
+        [ -L "$data_path" ] && rm -f "$data_path"
+        [ -d "$volume_path" ] && ! ls -1qA "$volume_path" | grep -q . && rm -rf "$volume_path"
+    else
+        [ -d "$data_path" ] && ! ls -1qA "$data_path" | grep -q . && rm -rf "$data_path"
+    fi
+}
+
+chown_paths()
+{
+    [ -d "$volume_path" ] && chown -R "$user:$user" "$volume_path"
+    [ -d "$data_path" ] && chown -R "$user:$user" "$data_path"
+}
+
+link()
+{
+    local user=$(get_user)
+    link_volume
+    chown_paths
+}
+
+unlink()
+{
+    unlink_volume
+}
+
+if [ "$1" ] && [ "$2" ]
+then
+    "$@"
+else
+    echo "usage: $(basename $0) {link|unlink} <app-name>"
+    exit 1
+fi
+
