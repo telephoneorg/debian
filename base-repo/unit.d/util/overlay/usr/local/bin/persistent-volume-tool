@@ -9,12 +9,12 @@
 # also fixes the ownership of the volume so that it doesn't have to be done in
 # the entrypoint script.
 #
-# volume_path: /volumes/$app/$(hostname -s)
+# volume_path: /volumes/$app/data/$(hostname -s)
 # data_path: /data/$app
 
 app="$2"
 short=$(env hostname -s)
-volume_path="/volumes/$app/$short"
+volume_path="/volumes/$app/data/$short"
 data_path="/data/$app"
 
 get_user()
@@ -82,4 +82,3 @@ else
     echo "usage: $(basename $0) {link|unlink} <app-name>"
     exit 1
 fi
-
