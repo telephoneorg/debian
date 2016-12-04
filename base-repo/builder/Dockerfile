@@ -3,6 +3,7 @@ FROM tklx/base:0.1.0
 # custom components: chanko, pool, repo, fab and their deps
 COPY debs /tmp/debs
 RUN set -x \
+    && sed 's/httpredir/ftp.us/g' /etc/apt/sources.list.d/sources.list \
     && echo "nameserver 8.8.8.8" > /etc/resolv.conf \
     && apt-get update \
     && dpkg -i /tmp/debs/*.deb || true \
