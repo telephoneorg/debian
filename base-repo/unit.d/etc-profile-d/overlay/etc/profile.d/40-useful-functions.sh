@@ -110,6 +110,16 @@ function linux::cap::show-warning {
 It's recommended to run container with --cap-add ${name^^}"
 }
 
+# net functions
+
+function net::is-long-hostname {
+    [[ $(hostname -f) =~ \. ]]
+}
+
+function net::is-short-hostname {
+    ! base::is-long-hostname
+}
+
 # kubernetes functions
 
 function kube::is-kubernetes {
@@ -230,6 +240,27 @@ function kube::host::get-subdomain {
     if kube::host::isnt-statefulset && [[ ${#parts[@]} = 6 ]]; then
         echo "${parts[1]}"
     fi
+}
+
+# erlang functions
+
+function erlang::vmargs::get-name {
+    if net::is-long-hostname; then
+        echo '-name couchdb'
+    else
+        echo '-sname couchdb'
+    fi
+}
+
+# ref: http://erlang.org/doc/apps/erts/crash_dump.html
+function erlang::set-erl-dump {
+    local path
+    if kube::is-kubernetes; then
+        path=/dev/termination-log
+    else
+        path=~/erlang-crash.dump
+    fi
+    export ERL_CRASH_DUMP="$path"
 }
 
 # kazoo functions
