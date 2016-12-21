@@ -2,19 +2,11 @@
 
 readonly SCRIPT_NAME=$(basename "$0")
 : readonly ${ERLANG_COOKIE_PATH:=~/.erlang.cookie}
-: readonly ${DEBUG_LOG_PATH:=/var/log/erlang-cookie.log}
-
-# Helpers
-log() {
-  local msg="$1"
-  local date="$(date '+%Y-%m-%d %H:%M:%S')"
-  echo "\033[36m[*]\033[0m $SCRIPT_NAME [$date] $msg" >> "$DEBUG_LOG_PATH" >&2
-}
 
 errlog() {
   local msg="$1"
   local date="$(date '+%Y-%m-%d %H:%M:%S')"
-  echo "\033[31m[x]\033[0m $SCRIPT_NAME [$date]: $msg" >> "$DEBUG_LOG_PATH" >&2
+  echo "\033[32m[x]\033[0m $SCRIPT_NAME [$date]: $msg" >&2
 }
 
 get_user() {
@@ -60,10 +52,13 @@ write_erlang_cookie() {
   local value="$1"
   if [ -f "$ERLANG_COOKIE_PATH" ]; then
     local cur_value=$(cat "$ERLANG_COOKIE_PATH")
-    if [ "$value" != "$cur_value" ] || [ -n "$cur_value" ]; then
+    if [ "$value" != "$cur_value" ] || [ -z "${cur_value}" ]; then
       echo "$value" > "$ERLANG_COOKIE_PATH"
     fi
   else
+    if [ "$value" = 'insecure-cookie' ]; then
+      errlog "*** ERLANG_COOKIE not set, falling back to insecure-cookie ***"
+    fi
     echo "$value" > "$ERLANG_COOKIE_PATH"
   fi
 }
@@ -122,7 +117,6 @@ main() {
     if [ -n "$ERLANG_COOKIE" ]; then
       local cookie="$ERLANG_COOKIE"
     else
-      errlog "*** No cookie in environment. Using insecure-cookie ***"
       local cookie='insecure-cookie'
     fi
     local user=$(get_user)

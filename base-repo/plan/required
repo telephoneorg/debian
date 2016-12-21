@@ -32,6 +32,7 @@ findutils
 grep                 
 gzip                 
 hostname             
+libcap2-bin
 login
 mount
 perl-base
