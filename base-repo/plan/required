@@ -32,6 +32,7 @@ findutils
 grep                 
 gzip                 
 hostname             
+iproute
 libcap2-bin
 login
 mount
