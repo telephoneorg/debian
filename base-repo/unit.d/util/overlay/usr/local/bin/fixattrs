@@ -146,19 +146,20 @@ function log-msg {
     local fmode="$4"
     local dmode="$5"
     local msg
-    msg+="  $path : "
+    msg+="  $path "
     if [[ $recursive = true ]]; then
-        msg+='recursively '
+        msg+='recurse '
     fi
-    msg+="applying owner: $owner fmode: $fmode dmode: $dmode"
+    msg+="o:$owner f:$fmode d:$dmode"
     log::m-info "$msg"
 }
 
 function apply-file {
     local file="$1"
     local path recursive owner fmode dmode
-    log::m-info "For: $file"
+    log::m-info ": $file"
     while read path recursive owner fmode dmode; do
+        path="${path//'~'/$HOME}"
         if path-is-sane "$path"; then
             log-msg "$path" $recursive "$owner" $fmode $dmode
             set-ownership "$path" $recursive "$owner"
