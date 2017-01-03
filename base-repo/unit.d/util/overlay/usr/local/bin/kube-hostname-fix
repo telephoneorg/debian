@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # DESCRIPTION
 # This script is necessary because kubernetes doesn't
@@ -10,8 +10,8 @@
 # simple enough.
 
 # When eval'd or executed, this script links the
-# /usr/local/bin/kube-hostname-wrapper script to a 
-# directory in the beginning of the path, under ~ for 
+# /usr/local/bin/kube-hostname-wrapper script to a
+# directory in the beginning of the path, under ~ for
 # the purposes of wrapping the hostname binary.
 
 # Afterwards, it sets the HOSTNAME environment variable
@@ -21,93 +21,100 @@
 # the /etc/hosts file for both localIP and podIP.
 
 # Finally HOSTNAME is exported so that the current
-# and any subshell just works, this only works if 
-# executing script inside an eval.  Ex: 
+# and any subshell just works, this only works if
+# executing script inside an eval.  Ex:
 #   eval $(kube-fix-hostname {enable|disable})
 
 # ARGUMENTS
 # n/a
 
-self=$(basename $0)
-selfdir=$(dirname $0)
-name="Kubernetes Hostname-Fix"
+KHF_BASE=$(basename $0)
+KHF_DIR=$(dirname $0)
+KHF_WRAP_PATH="$KHF_DIR/kube-hostname-wrapper"
+KHF_NAME="Kubernetes Hostname-Fix"
 
-link_hostname()
-{
-    echo "Applying $name ..." >&2
-    ln -sf $selfdir/kube-hostname-wrapper $selfdir/hostname
+
+function link-hostname {
+    [[ ! $- =~ i ]] && echo "Applying $KHF_NAME ..." >&2
+    # ln -sf $KHF_DIR/kube-hostname-wrapper $KHF_DIR/hostname
+    if [[ ! $PATH =~ $KHF_WRAP_PATH ]]; then
+        echo "OLDPATH=$PATH"
+        echo "PATH=${KHF_WRAP_PATH}:$PATH"
+    fi
 }
 
-unlink_hostname()
-{
-    echo "Unapplying $name ..." >&2
-    [ -f $selfdir/hostname ] && $(rm -f $selfdir/hostname)
+function unlink-hostname {
+    [[ ! $- =~ i ]] && echo "Unapplying $KHF_NAME ..." >&2
+    # [ -f $KHF_DIR/hostname ] && rm -f $KHF_DIR/hostname
+    if [[ ! $PATH =~ $KHF_WRAP_PATH ]]; then
+        if [[ ! -z $OLDPATH ]]; then
+            echo "PATH=$OLDPATH"
+        else
+            echo "PATH=${PATH//$KHF_WRAP_PATH:/}"
+        fi
+    fi
 }
 
-set_hostname_env() {
-    if [ "$KUBERNETES_USE_SHORTNAME" = true ]
-    then
+function hash-hostname {
+    hash -r
+}
+
+function set-hostname-env {
+    if [ "$KUBE_HOSTNAME_SHORT" = true ]; then
         HOSTNAME=$(env hostname -s)
     else
         HOSTNAME=$(env hostname -f)
     fi
 }
 
-set_etc_hostname()
-{
+function set-etc-hostname {
     echo "$HOSTNAME" > /etc/hostname
 }
 
-write_etc_hosts()
-{
+function write-etc-hosts {
     local ip=$(env hostname -i)
     local short=$(env hostname -s)
     local fqdn=$(env hostname -f)
-    clean_etc_hosts
-    if ! cat /etc/hosts | grep --silent $HOSTNAME
-    then
+    clean-etc-hosts
+    if ! cat /etc/hosts | grep --silent $HOSTNAME; then
         cat <<EOF >> /etc/hosts
-127.0.0.1    $fqdn    $short   # added by $self
-$ip    $fqdn    $short # added by $self
+127.0.0.1    $fqdn    $short   # added by $KHF_BASE
+$ip    $fqdn    $short # added by $KHF_BASE
 EOF
     fi
 }
 
-clean_etc_hosts()
-{
-    # it's really hard writing to the open file /etc/hosts
+function clean-etc-hosts {
+    # it's really hard writing to the mounted file /etc/hosts
     # correctly under docker.
-    echo "$(sed "/$self/d" /etc/hosts)" > /etc/hosts
+    echo "$(sed "/$KHF_BASE/d" /etc/hosts)" > /etc/hosts
 }
 
-export_hostname()
-{
-    echo "export HOSTNAME=$HOSTNAME"
+function export-hostname {
+    echo "HOSTNAME=$HOSTNAME"
 }
 
-enable()
-{
-    link_hostname
-    set_hostname_env
-    set_etc_hostname
-    write_etc_hosts
-    export_hostname
+function enable {
+    link-hostname
+    hash-hostname
+    set-hostname-env
+    set-etc-hostname
+    write-etc-hosts
+    export-hostname
 }
 
-disable() 
-{
-    unlink_hostname
-    set_hostname_env
-    set_etc_hostname
-    clean_etc_hosts
-    export_hostname
+function disable {
+    unlink-hostname
+    hash-hostname
+    set-hostname-env
+    set-etc-hostname
+    clean-etc-hosts
+    export-hostname
 }
 
-if [ "$1" ]
-then
+if [ "$1" ]; then
     "$@"
 else
-    echo "usage: eval \$($self {enable|disable})" >&2
+    echo "usage: export \$($KHF_BASE {enable|disable})" >&2
     exit 1
 fi
-

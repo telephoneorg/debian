@@ -636,3 +636,12 @@ function kazoo::build-amqp-uris {
     done
     echo "${hosts[@]}"
 }
+
+function shell::is-interactive {
+    [[ $- =~ i ]]
+}
+
+function shell::is-not-interactive {
+    ! shell::is-interactive
+}
+
