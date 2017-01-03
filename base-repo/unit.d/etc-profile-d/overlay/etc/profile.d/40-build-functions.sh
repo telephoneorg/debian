@@ -14,6 +14,6 @@ function build::apt::add-key {
 
 function build::user::create {
     local user="${1:-$USER}"
-    log::m-info "Creating user: $user and group: $group ..."
+    log::m-info "Creating user and group: $user ..."
     useradd --system --home-dir ~ --create-home --shell /bin/false --user-group $user
 }
