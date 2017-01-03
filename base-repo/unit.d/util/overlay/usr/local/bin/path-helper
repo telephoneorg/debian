@@ -1,4 +1,4 @@
-#!/bin/bash -l
+#!/bin/bash
 
 readonly PH_PATHS_PATH=/etc/paths.d
 
