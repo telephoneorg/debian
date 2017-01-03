@@ -85,6 +85,7 @@ function main {
     if is-directory $PH_PATHS_PATH; then
         local new_paths=($(get-new-paths))
         local merged_paths=$(merge-paths)
+        merged_paths=$(echo $merged_paths | sed 's/^://')
         echo "PATH=$merged_paths"
     fi
 }
