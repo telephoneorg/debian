@@ -1,5 +1,5 @@
 if [[ -d /etc/environment.d ]] && (($(ls -A /etc/environment.d | wc -l) > 0)); then
-    for f in /etc/environment.d/*.sh; do
+    for f in /etc/environment.d/*; do
         if [ -r $f ]; then
             . $f
         fi
