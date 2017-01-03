@@ -1,0 +1,8 @@
+if [ -d /etc/entrypoint.d ]; then
+    for f in /etc/entrypoint.d/*.sh; do
+        if [ -r $f ]; then
+            . $f
+        fi
+    done
+    unset f
+fi
