@@ -23,7 +23,7 @@
 # Finally HOSTNAME is exported so that the current
 # and any subshell just works, this only works if
 # executing script inside an eval.  Ex:
-#   eval $(kube-fix-hostname {enable|disable})
+#   export $(kube-fix-hostname {enable|disable})
 
 # ARGUMENTS
 # n/a
@@ -35,22 +35,26 @@ KHF_NAME="Kubernetes Hostname-Fix"
 
 
 function link-hostname {
-    [[ ! $- =~ i ]] && echo "Applying $KHF_NAME ..." >&2
+    # [[ ! $- =~ i ]] && echo "Applying $KHF_NAME ..." >&2
     # ln -sf $KHF_DIR/kube-hostname-wrapper $KHF_DIR/hostname
     if [[ ! $PATH =~ $KHF_WRAP_PATH ]]; then
+        export OLDPATH=$PATH
         echo "OLDPATH=$PATH"
-        echo "PATH=${KHF_WRAP_PATH}:$PATH"
+        export PATH=${KHF_WRAP_PATH}:$PATH
+        echo "PATH=$PATH"
     fi
 }
 
 function unlink-hostname {
-    [[ ! $- =~ i ]] && echo "Unapplying $KHF_NAME ..." >&2
+    # [[ ! $- =~ i ]] && echo "Unapplying $KHF_NAME ..." >&2
     # [ -f $KHF_DIR/hostname ] && rm -f $KHF_DIR/hostname
-    if [[ ! $PATH =~ $KHF_WRAP_PATH ]]; then
+    if [[ $PATH =~ $KHF_WRAP_PATH ]]; then
         if [[ ! -z $OLDPATH ]]; then
-            echo "PATH=$OLDPATH"
+            export PATH=$OLDPATH
+            echo "PATH=$PATH"
         else
-            echo "PATH=${PATH//$KHF_WRAP_PATH:/}"
+            export PATH=${PATH//$KHF_WRAP_PATH:/}
+            echo "PATH=$PATH"
         fi
     fi
 }
