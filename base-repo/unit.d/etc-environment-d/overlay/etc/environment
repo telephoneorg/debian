@@ -1,10 +1,9 @@
-if [ -d /etc/environment.d ]; then
+if [[ -d /etc/environment.d ]] && (($(ls -A /etc/environment.d | wc -l) == 0)); then
     for f in /etc/environment.d/*.sh; do
         if [ -r $f ]; then
             . $f
         fi
     done
     unset f
+    export $(cat /etc/environment.d/* | grep -v ^# | grep '[^[:blank:]]' | cut -d= -f1)
 fi
-
-export $(cat /etc/environment.d/* | grep -v ^# | grep '[^[:blank:]]' | cut -d= -f1)
