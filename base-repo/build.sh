@@ -2,10 +2,9 @@
 
 set -e
 
-: ${RELEASE:=debian/jessie}
-
 base=$(dirname $0)
-export RELEASE DOCKER_USER
+: ${RELEASE:=debian/jessie}
+export RELEASE
 
 mkdir -p $base/build
 

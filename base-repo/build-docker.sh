@@ -2,9 +2,7 @@
 
 set -e
 
-: ${RELEASE:=debian/jessie}
+base=$(dirname $0)
 
-export RELEASE
-
-docker build -t $DOCKER_USER/${RELEASE/\//:} $(dirname $0)
-docker run -i --rm $DOCKER_USER/${RELEASE/\//:} bash -lc env
+docker build -t $DOCKER_USER/latest $base
+docker run -i --rm $DOCKER_USER/latest bash -lc env
