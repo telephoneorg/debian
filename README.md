@@ -1,6 +1,5 @@
 # Debian Base Image
 
-![docker automated build](https://img.shields.io/docker/automated/callforamerica/debian.svg)
 ![docker pulls](https://img.shields.io/docker/pulls/callforamerica/debian.svg)
 
 ## Maintainer
@@ -28,7 +27,7 @@ Pull requests with improvements always welcome.
     * [docker-autoremove-suggests](base-repo/unit.d/apt/overlay/etc/apt/apt.conf.d/docker-autoremove-suggests)
     * [no-install-suggests](base-repo/unit.d/apt/overlay/etc/apt/apt.conf.d/no-install-reccomends)
 
-* Changes to `unit.d/etc-skel` 
+* Changes to `unit.d/etc-skel`
     * set .bashrc to `! shopt -q login_shell && . /etc/profile`
 
 * Created new unit in `unit.d/std-dirs`:
@@ -83,7 +82,7 @@ This is a golang compiled binary compressed with upx, designed to address certai
 
 #### Usage: [not intended for direct usage]
 
-    
+
 ### `containerid`
 
 [containerid](base-repo/unit.d/util/overlay/usr/local/bin/containerid)
@@ -125,7 +124,7 @@ Writes the value of `ERLANG_COOKIE:=insecure-cookie` to `~/.erlang-cookie`
 
 #### Usage:
     `write-erlang-cookie` : Write's erlang cookie
-    `write-erlang-cookie disable`: Removes erlang cookie 
+    `write-erlang-cookie disable`: Removes erlang cookie
 
 
 ### `persist-volume-util`
@@ -153,13 +152,10 @@ Links from the persist volume directory to a standard directory under /data if P
 
 ## Gotchas
 
-### Problem: 
+### Problem:
 
 I ran `apt-get install curl` and curl isn't working for sites with TLS
 
 ### Answer:
 
 This minimal distribution has some changes made to apt.conf.d that alter apt-get's behavior.  Suggested and reccomended packages are no longer installed by default, and closely equivalent to running `apt-get install --no-install-reccomends <pkg>`.  Therefore you need to be more explicit if what you are installing depends on packages that are only reccomended or suggested.  In the case of curl, you can fix this by issuing `apt-get install -y curl ca-certificates` in order to pull in the root ca's and also setup requirements such as gnutls.
-
-
-
