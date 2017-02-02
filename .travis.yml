@@ -1,0 +1,26 @@
+services: docker
+env:
+  global:
+  - DOCKER_USER=callforamerica
+  # DOCKER_PASS
+  - secure: "AWIWvZ47NKpBedQaJdPDJVbd0JNLyAx6QKg+KO4ZKo30jKdF/y3mfOQMGt+8ZwPdJADG3Czfa8iNsfg56gbUqHjy56/sN5Y6QMigyANvxeDXqRrx5wwlbBO3msi14Jm+heq0Kn0GBQQgVH2IFsptNbyAKb2VSv18Z8q0Bud9C2qZ4SchVhjCW5GLSssiEnSq4X5rxZEeEU9vjeESvQwWYfcZX/DIy3hFqCjrtMAl94jxHnz4KHjFPDTnkxbPsJ3IJiTlYe2/aKmDwdsHa9gZPsnwfP7Qmme4DDMt9apzKg4UzRTQS3k507RdF8SgsY9YgjjscgXQOIQqhy27BicdQ5m3LS4/iakt58nTd/3NF/dIKCG1YmsPrKJ6O4/Hd+P5pvwy7/2+LPonqA3L3OrRclopZMXDCzB5DTuS6DMns8M31MzuNauPcVRu+FFrqRRn0JAZ11NK/RmS9eZTll3mJqAYHM+jbxKmJJiw2oNvhHz2a3Fyic7gHGQyxCC6Wl1QTokcpkvvRIkQ7LctexIZSUmIXPsicu0Jh/hV8WpymvVnDNscoWzkOVwkCfppjsFM23Xf0wVpo5PMOoW7okvXM3JGdncc8HDXmRMiUFGidMhDV736+04r4oQC1yfOpBaS5isKQJcQns8bdIBt4ACTPBmg7nZapbE4NqVGo5feDs8="
+notifications:
+  email:
+    on_success: never
+    on_failure: always
+  slack:
+    rooms:
+    - secure: "RQMm3CSI5m2RagvzSIwlSzQbR8YdoKEkbsNZ9/EYR/ZU9gjHSzBWQthhlnKPq1uMTntulhwkskZf8qD6XE/2ciHaQOaJR+lWnXBnsOFc5c0tr63outV/LMPpyzgiEGyspYJ3EFMBBrWnTNc8tXbCf6Llv6zIB7h8LrWhWkUHggGvF4BCRi+H45vWlpamraaBtVp5mP9U17xAi4ZI5LzFfZk+YH0aVUWxlj/VMEH4kMN7UpfaS0hG1GjG50plmtUQWJ0Fs0p5c7ACMgio+3K+4/zX0pvTdVOqVIGloSyzczgUOKuI8vP2GaJ7v+Vgvf54tBiaMK2IxTGRV9VnoKeaHHSd1QFQXOL+olWqsX+v7qIUaHb/ssgHLhxGo8mEvDE8Ji98XK3IFcBT4Cqg9w8+sov2O53q8Y6R+I9+p9LtzD3gwD/sljJyMCjWBq5VkQxI6+clxLbsjF4Umupf9jDb967Np9DIHMu13fRnQp45asKyXVA3+a+FMXvOfPE5igPsqZ7K2zCqZu30xhYTEme2nznYQjsIx4uw9Uh0H+oUEF9DpKxhzyk15qVtEaBcSS2wdnl6PirDnc7O0+8VgAh7prD0mLqaML/nUsv7MdiKxPenV7k+YDI6/obKEEopeF/kIQhPLDmfIM+pdF2tJyOIe99ukgrpLrSELuvHTP/qkLI="
+    on_success: always
+    on_failure: always
+
+install:
+- base-repo/init.sh
+- base-repo/build.sh
+- base-repo/build-docker.sh
+
+script: true
+
+after_success:
+- docker login -u $DOCKER_USER -p $DOCKER_PASS
+- docker push $DOCKER_USER/debian

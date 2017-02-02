@@ -31,14 +31,15 @@ function container-id {
 
 function get-ipv4 {
     local interface="${1:-eth0}"
-    if linux::cmd-exists 'ip'; then
+    if linux::cmd::exists 'ip'; then
         ip -o -f inet addr show $interface | sed 's/.*inet \(.*\)\/.*/\1/'
-    elif linux::cmd-exists 'ifconfig'; then
+    elif linux::cmd::exists 'ifconfig'; then
         ifconfig $interface | grep 'inet ' | cut -d':' -f2 | awk '{print $1}'
-    elif linux::cmd-exists 'hostname'; then
-        hostname -i | head -1 
+    elif linux::cmd::exists 'hostname'; then
+        hostname -i | head -1
     fi
 }
+
 
 # logging functions
 
@@ -128,7 +129,7 @@ function linux::cmd::does-not-exist {
 
 function linux::pkg::installed {
     local cmd="$1"
-    linux::cmd-exists "$cmd"
+    linux::cmd::exists "$cmd"
 }
 
 function linux::pkg::not-installed {
@@ -200,10 +201,10 @@ function net::is-short-hostname {
 
 function net::get-mtu {
     local interface="${1:-eth0}"
-    if linux::cmd-exists 'ip'; then
+    if linux::cmd::exists 'ip'; then
         ip -o link show $interface | awk '{print $5}'
-    elif linux::cmd-exists 'ifconfig'; then
-        ifconfig $interface | grep MTU | awk '{print $5}' | cut -d':' -f2 
+    elif linux::cmd::exists 'ifconfig'; then
+        ifconfig $interface | grep MTU | awk '{print $5}' | cut -d':' -f2
     fi
 }
 
@@ -462,7 +463,7 @@ function kube::api::_get-api {
     esac
 }
 
-function kube::api::_get-object {    
+function kube::api::_get-object {
     local type="$1"
     local name="$2"
     local token=$(kube::sa::get-token)
@@ -637,6 +638,19 @@ function kazoo::build-amqp-uris {
     echo "${hosts[@]}"
 }
 
+function kazoo::build-amqp-uri-list {
+    local list="$1"
+    local label="${2:-amqp_uri}"
+    local prefix='amqp'
+    local uris=($(kazoo::build-amqp-uris "$list" "$prefix"))
+    local hosts
+    local host
+    for host in "${uris[@]}"; do
+        hosts+="$label = \"$host\"\n"
+    done
+    echo -e "$hosts" | head -n -1
+}
+
 function shell::is-interactive {
     [[ $- =~ i ]]
 }
@@ -644,4 +658,3 @@ function shell::is-interactive {
 function shell::is-not-interactive {
     ! shell::is-interactive
 }
-
