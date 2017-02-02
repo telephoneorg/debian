@@ -3,9 +3,8 @@
 set -e
 
 : ${RELEASE:=debian/jessie}
-: ${DOCKER_ACCOUNT:=callforamerica}
 
-export RELEASE DOCKER_ACCOUNT
+export RELEASE
 
-docker build -t $DOCKER_ACCOUNT/${RELEASE/\//:} .
-docker run -i --rm $DOCKER_ACCOUNT/${RELEASE/\//:} bash -lc env
+docker build -t $DOCKER_USER/${RELEASE/\//:} $(dirname $0)
+docker run -i --rm $DOCKER_USER/${RELEASE/\//:} bash -lc env

@@ -5,7 +5,7 @@ TAG = $(shell git tag | sort -n | tail -1)
 ROOTFS = base-repo/build/rootfs.tar.gz
 
 init:
-	@cd base-repo && ./init.sh
+	@docker build -t builder base-repo/builder
 
 build:
 	@cd base-repo && ./build.sh
@@ -40,4 +40,3 @@ upload-release:
 	@github-release upload --user $(USER) --repo $(PROJECT) --tag $(TAG) --name $(shell basename $(ROOTFS)) --file $(ROOTFS)
 
 default: build
-

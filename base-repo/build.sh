@@ -3,16 +3,12 @@
 set -e
 
 : ${RELEASE:=debian/jessie}
-: ${DOCKER_ACCOUNT:=callforamerica}
 
-export RELEASE DOCKER_ACCOUNT
+base=$(dirname $0)
+export RELEASE DOCKER_USER
 
-mkdir -p build
+mkdir -p $base/build
 
-builder/run chanko-upgrade
-builder/run make clean
-builder/run make
-
-# docker build -t $DOCKER_ACCOUNT/${RELEASE/\//:} .
-# docker run -i --rm $DOCKER_ACCOUNT/${RELEASE/\//:} bash -lc env
-
+$base/builder/run chanko-upgrade
+$base/builder/run make clean
+$base/builder/run make
