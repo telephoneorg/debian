@@ -1,4 +1,7 @@
-language: python
+addons:
+  apt:
+    packages:
+    - realpath
 services: docker
 env:
   global:
