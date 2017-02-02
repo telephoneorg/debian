@@ -1,7 +1,6 @@
 # Debian Base Image
 
-![docker pulls](https://img.shields.io/docker/pulls/callforamerica/debian.svg)
-![build status](https://travis-ci.org/sip-li/debian.svg?branch=master)
+![docker pulls](https://img.shields.io/docker/pulls/callforamerica/debian.svg) ![build status](https://travis-ci.org/sip-li/debian.svg?branch=master)
 
 ## Maintainer
 
