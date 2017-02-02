@@ -1,4 +1,4 @@
 #!/bin/bash -e
 
+mkdir -p /etc/profile.d
 dircolors -p > /etc/dircolors
-
