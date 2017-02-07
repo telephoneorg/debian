@@ -1,4 +1,4 @@
 # activate hostname fix
-if [[ $KUBE_HOSTNAME_FIX = true ]]; then
-    export $(kube-hostname-fix enable)
+if [[ $KUBE_HOSTNAME_FIX == true ]]; then
+    eval $(kube-hostname-fix enable)
 fi

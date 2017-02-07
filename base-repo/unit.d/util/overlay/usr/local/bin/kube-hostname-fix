@@ -26,99 +26,137 @@
 #   export $(kube-fix-hostname {enable|disable})
 
 # ARGUMENTS
-# n/a
-
-KHF_BASE=$(basename $0)
-KHF_DIR=$(dirname $0)
-KHF_WRAP_PATH="$KHF_DIR/kube-hostname-wrapper"
-KHF_NAME="Kubernetes Hostname-Fix"
+# action:
+#   `enable` or `disable`, required.
 
 
-function link-hostname {
-    # [[ ! $- =~ i ]] && echo "Applying $KHF_NAME ..." >&2
-    # ln -sf $KHF_DIR/kube-hostname-wrapper $KHF_DIR/hostname
-    if [[ ! $PATH =~ $KHF_WRAP_PATH ]]; then
-        export OLDPATH=$PATH
-        echo "OLDPATH=$PATH"
-        export PATH=${KHF_WRAP_PATH}:$PATH
-        echo "PATH=$PATH"
+base=$(basename $0)
+LIB_OVERRIDEHOSTNAME_PATH=/usr/local/lib/liboverridehostname.so.1
+
+# Helpers
+
+function get-ip {
+    hostname -I | xargs -n 1 | head -1
+}
+
+function get-namespace {
+    if [[ -f /var/run/secrets/kubernetes.io/serviceaccount/namespace ]]; then
+        echo $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
+    else
+        echo "${NAMESPACE:=default}"
     fi
 }
 
-function unlink-hostname {
-    # [[ ! $- =~ i ]] && echo "Unapplying $KHF_NAME ..." >&2
-    # [ -f $KHF_DIR/hostname ] && rm -f $KHF_DIR/hostname
-    if [[ $PATH =~ $KHF_WRAP_PATH ]]; then
-        if [[ ! -z $OLDPATH ]]; then
-            export PATH=$OLDPATH
-            echo "PATH=$PATH"
-        else
-            export PATH=${PATH//$KHF_WRAP_PATH:/}
-            echo "PATH=$PATH"
-        fi
+function get-domain {
+    echo "${NAMESPACE:-cluster.local}"
+}
+
+function get-shost {
+    get-ip | sed 's/\./-/g'
+}
+
+function get-fqdn {
+    local ip=$(get-ip)
+    local shost=$(get-shost)
+    local namespace=$(get-namespace)
+    local domain=$(get-domain)
+    echo "${shost}.${namespace}.pod.${domain}"
+}
+
+function get-hostname {
+    if [[ $USE_LONG_HOSTNAME == true ]]; then
+        get-fqdn
+    else
+        get-shost
     fi
 }
 
-function hash-hostname {
-    hash -r
+function get-orig-hostname {
+    uname -n
+}
+
+# Actions
+
+function load-module {
+    export LD_PRELOAD=$LIB_OVERRIDEHOSTNAME_PATH
+    export OVERRIDE_HOSTNAME=true
+    echo "export LD_PRELOAD=$LIB_OVERRIDEHOSTNAME_PATH"
+    echo "export OVERRIDE_HOSTNAME=true"
+}
+
+function unload-module {
+    unset LD_PRELOAD OVERRIDE_HOSTNAME
+    echo "unset LD_PRELOAD OVERRIDE_HOSTNAME"
+}
+
+function set-hostname {
+    hostname "$(get-hostname)"
+}
+
+function unset-hostname {
+    hostname "$(get-orig-hostname)"
 }
 
 function set-hostname-env {
-    if [ "$KUBE_HOSTNAME_SHORT" = true ]; then
-        HOSTNAME=$(env hostname -s)
-    else
-        HOSTNAME=$(env hostname -f)
+    export HOSTNAME=$(hostname)
+    echo "export HOSTNAME=$(hostname)"
+}
+
+function unset-hostname-env {
+    export HOSTNAME=$(get-orig-hostname)
+    echo "export HOSTNAME=$(get-orig-hostname)"
+}
+
+function write-new-to-etc-hosts {
+    local ip=$(get-ip)
+    local shost=$(get-shost)
+    local fqdn=$(get-fqdn)
+    if ! cat /etc/hosts | grep --silent "$shost"; then
+        echo "$ip    $fqdn  $shost" >> /etc/hosts
     fi
 }
 
-function set-etc-hostname {
-    echo "$HOSTNAME" > /etc/hostname
-}
-
-function write-etc-hosts {
-    local ip=$(env hostname -i)
-    local short=$(env hostname -s)
-    local fqdn=$(env hostname -f)
-    clean-etc-hosts
-    if ! cat /etc/hosts | grep --silent $HOSTNAME; then
-        cat <<EOF >> /etc/hosts
-127.0.0.1    $fqdn    $short   # added by $KHF_BASE
-$ip    $fqdn    $short # added by $KHF_BASE
-EOF
+function write-orig-to-etc-hosts {
+    local ip=$(get-ip)
+    local ohost=$(get-orig-hostname)
+    if ! cat /etc/hosts | grep --silent "$ohost"; then
+        echo "$ip    $ohost" >> /etc/hosts
     fi
 }
 
-function clean-etc-hosts {
+function remove-orig-from-etc-hosts {
     # it's really hard writing to the mounted file /etc/hosts
     # correctly under docker.
-    echo "$(sed "/$KHF_BASE/d" /etc/hosts)" > /etc/hosts
+    echo "$(sed "/$(get-orig-hostname)/d" /etc/hosts)" > /etc/hosts
 }
 
-function export-hostname {
-    echo "HOSTNAME=$HOSTNAME"
+function remove-override-from-etc-hosts {
+    # it's really hard writing to the mounted file /etc/hosts
+    # correctly under docker.
+    echo "$(sed "/$(get-shost)/d" /etc/hosts)" > /etc/hosts
 }
+
+# Targets
 
 function enable {
-    link-hostname
-    hash-hostname
+    load-module
+    set-hostname
+    remove-orig-from-etc-hosts
+    write-new-to-etc-hosts
     set-hostname-env
-    set-etc-hostname
-    write-etc-hosts
-    export-hostname
 }
 
 function disable {
-    unlink-hostname
-    hash-hostname
-    set-hostname-env
-    set-etc-hostname
-    clean-etc-hosts
-    export-hostname
+    unset-hostname
+    remove-override-from-etc-hosts
+    write-orig-to-etc-hosts
+    unset-hostname-env
+    unload-module
 }
 
 if [ "$1" ]; then
     "$@"
 else
-    echo "usage: export \$($KHF_BASE {enable|disable})" >&2
+    echo "usage: export \$($base {enable|disable})" >&2
     exit 1
 fi

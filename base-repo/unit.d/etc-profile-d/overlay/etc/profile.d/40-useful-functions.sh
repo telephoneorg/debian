@@ -192,7 +192,7 @@ function linux::get-function-names {
 # net functions
 
 function net::is-long-hostname {
-    [[ $(hostname -f) =~ \. ]]
+    [[ $(hostname) =~ \. ]]
 }
 
 function net::is-short-hostname {
@@ -620,10 +620,10 @@ function kazoo::erts::get-version {
 
 function kazoo::build-amqp-uri {
     local host="$1"
-    local prefix="${2:-amqp}"
-    local port="${3:-5672}"
-    local user="${4:-guest}"
-    local pass="${5:-guest}"
+    local prefix=${2:-amqp}
+    local port=${3:-5672}
+    local user=${RABBITMQ_USER:=guest}
+    local pass=${RABBITMQ_PASS:=guest}
     printf '%s://%s:%s@%s:%s\n' $prefix "$user" "$pass" $host $port
 }
 
