@@ -1,34 +1,34 @@
 #!/bin/bash
 
 # DESCRIPTION
-# This script is necessary because kubernetes doesn't
-# set the pod hostname to a hostname that's resolvable
-# outside of the pod.
-
-# Kubernetes does however assign pod hostnames that are
-# resolvable from others pods, and the algorithm is
-# simple enough.
-
-# When eval'd or executed, this script links the
-# /usr/local/bin/kube-hostname-wrapper script to a
-# directory in the beginning of the path, under ~ for
-# the purposes of wrapping the hostname binary.
-
-# Afterwards, it sets the HOSTNAME environment variable
-# to shortname or longname (fqdn), defaulting to fqdn.
-
-# It also echo's the hostname's short and longname to
-# the /etc/hosts file for both localIP and podIP.
-
-# Finally HOSTNAME is exported so that the current
-# and any subshell just works, this only works if
-# executing script inside an eval.  Ex:
-#   export $(kube-fix-hostname {enable|disable})
-
+# This script is necessary because kubernetes doesn't set the pod hostname to a
+# hostname that's resolvable outside of the pod.  This is done intentionally
+# for good reason, however it makes running certain applications difficult
+# under kubernetes.  Among these are any application utilizing the erlang
+# distribution protocol.
+#
+# Kubernetes does actually assign pod hostnames that are resolvable within
+# KubeDNS and the algorithm is simple enough to calculate from the ip address.
+#
+# When enabled this script will load a shared library `liboverridehostname` to
+# intercept calls to gethostname(2) and sethostname(2). For more information
+# see the appropriate repo: https://github.com/joeblackwaslike/overridehostname
+# In short, however, this allows the hostname binary to be used as normal. This
+# script however is the glue that enables/disables this behavior, and ensures
+# that /etc/hosts is properly setup for the new hostname as well.  Additionally
+# this script also exports the correct hostname to `HOSTNAME`.
+#
+# Because this needs to export environment variables into your current session,
+# it is recommended to eval it: `eval $(kube-hostname-fix enable)`.  If you
+# know what you're doing however, feel free to parse the output yourself.
+#
+# USAGE:
+#   enable:  eval $(kube-hostname-fix enable)
+#   disable: eval $(kube-hostname-fix disable)
+#
 # ARGUMENTS
 # action:
 #   `enable` or `disable`, required.
-
 
 base=$(basename $0)
 LIB_OVERRIDEHOSTNAME_PATH=/usr/local/lib/liboverridehostname.so.1
@@ -43,12 +43,12 @@ function get-namespace {
     if [[ -f /var/run/secrets/kubernetes.io/serviceaccount/namespace ]]; then
         echo $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
     else
-        echo "${NAMESPACE:=default}"
+        echo "${KUBE_NAMESPACE:=default}"
     fi
 }
 
 function get-domain {
-    echo "${NAMESPACE:-cluster.local}"
+    echo "${KUBE_DOMAIN:-cluster.local}"
 }
 
 function get-shost {
@@ -157,6 +157,6 @@ function disable {
 if [ "$1" ]; then
     "$@"
 else
-    echo "usage: export \$($base {enable|disable})" >&2
+    echo "usage: eval \$($base {enable|disable})" >&2
     exit 1
 fi

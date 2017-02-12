@@ -192,7 +192,7 @@ function linux::get-function-names {
 # net functions
 
 function net::is-long-hostname {
-    [[ $(hostname) =~ \. ]]
+    [[ $USE_LONG_HOSTNAME == true || $(hostname) =~ \. ]]
 }
 
 function net::is-short-hostname {
