@@ -4,11 +4,11 @@ TAG = $(shell git tag | sort -n | tail -1)
 
 ROOTFS = base-repo/build/rootfs.tar.gz
 
-init:
-	@docker build -t builder base-repo/builder
+build-builder:
+	@cd base-repo && ./build-builder.sh
 
-build:
-	@cd base-repo && ./build.sh
+build-rootfs:
+	@cd base-repo && ./build-rootfs.sh
 
 build-docker:
 	@cd base-repo && ./build-docker.sh
