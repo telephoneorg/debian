@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# DESCRIPTION
+# This script is used as a stopgap measure until dns works correctly in
+# kubernetes pods that are run with `hostNetwork: true`.  All it does is check
+# whether the search domains exist and if they do not, it adds them.
+#
+# It's reccomended to run this somewhere in /etc/profile.d/ if:
+# `KUBE_SEARCH_DOMAINS_ADD == true`.
+#
+# USAGE:
+#   add:    kube-search-domains add
+#   remove: kube-search-domains remove
+#
+# ARGUMENTS
+# action:
+#   `add` or `remove`, required.
+
+base=$(basename $0)
+
+# Helpers
+
+function get-namespace {
+    if [[ -f /var/run/secrets/kubernetes.io/serviceaccount/namespace ]]; then
+        echo $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
+    else
+        echo "${KUBE_NAMESPACE:=default}"
+    fi
+}
+
+function get-domain {
+    echo "${KUBE_DOMAIN:-cluster.local}"
+}
+
+# Actions
+
+function add-search-domains {
+    local namespace=$(get-namespace)
+    local domain=$(get-domain)
+    if ! grep -q "${namespace}.svc" /etc/resolv.conf; then
+        echo "search ${namespace}.svc.${domain} svc.${domain} $domain" >> /etc/resolv.conf
+    fi
+}
+
+function remove-search-domains {
+    local namespace=$(get-namespace)
+    if grep -q "${namespace}.svc" /etc/resolv.conf; then
+        # device is always busy, so unable to sed -i filename
+        echo "$(sed "/${namespace}\.svc/d" /etc/resolv.conf)" > /etc/resolv.conf
+    fi
+}
+
+# Targets
+
+function add {
+    add-search-domains
+}
+
+function remove {
+    remove-search-domains
+}
+
+if [ "$1" ]; then
+    "$@"
+else
+    echo "usage: $base {add|remove}" >&2
+    exit 1
+fi
