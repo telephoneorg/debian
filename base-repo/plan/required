@@ -1,4 +1,4 @@
-/* 
+/*
 
 This file should only contain packages flagged as Essential and any
 extra dependencies they require.
@@ -19,19 +19,19 @@ Notes:
 
 base-files
 base-passwd
-bash                 
+bash
 bash-completion
-bsdutils             
+bsdutils
 coreutils
 debianutils
-dash                 
+dash
 diffutils
 dpkg
 e2fsprogs
-findutils            
-grep                 
-gzip                 
-hostname             
+findutils
+grep
+gzip
+hostname
 iproute
 libcap2-bin
 login

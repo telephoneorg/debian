@@ -110,13 +110,6 @@ function log::m-error {
 
 # linux functions
 
-function linux::echo-file {
-    local path="$1"
-    if [[ -f $path ]]; then
-        echo $(cat "$path")
-    fi
-}
-
 function linux::cmd::exists {
     local cmd="$1"
     hash "$cmd" > /dev/null 2>&1
@@ -125,16 +118,6 @@ function linux::cmd::exists {
 function linux::cmd::does-not-exist {
     local cmd="$1"
     hash "$cmd" > /dev/null 2>&1
-}
-
-function linux::pkg::installed {
-    local cmd="$1"
-    linux::cmd::exists "$cmd"
-}
-
-function linux::pkg::not-installed {
-    local cmd="$1"
-    ! linux::installed "$cmd"
 }
 
 function linux::cap::is-enabled {
@@ -492,12 +475,12 @@ function kube::sa::_get-path {
 
 function kube::sa::get-namespace {
     local path=$(kube::sa::_get-path 'namespace')
-    linux::echo-file "$path"
+    cat "$path"
 }
 
 function kube::sa::get-token {
     local path=$(kube::sa::_get-path 'token')
-    linux::echo-file "$path"
+    cat "$path"
 }
 
 function kube::host::_parse {
