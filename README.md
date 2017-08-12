@@ -1,8 +1,8 @@
 # Debian Base Image
-[![Build Status](https://travis-ci.org/sip-li/debian.svg?branch=master)](https://travis-ci.org/sip-li/debian) [![Docker Pulls](https://img.shields.io/docker/pulls/callforamerica/debian.svg)](https://hub.docker.com/r/callforamerica/debian/)
+[![Build Status](https://travis-ci.org/joeblackwaslike/debian.svg?branch=master)](https://travis-ci.org/joeblackwaslike/debian) [![Docker Pulls](https://img.shields.io/docker/pulls/callforamerica/debian.svg)](https://hub.docker.com/r/callforamerica/debian/)
 
 ## Maintainer
-Joe Black | <joe@valuphone.com> | [github](https://github.com/joeblackwaslike)
+Joe Black | <me@joeblack.nyc> | [github](https://github.com/joeblackwaslike)
 
 ## Introduction
 The purpose of this project was to create an extremely minimal operating system for containers based on Debian.  Something comparable to the size of alpine containers but based on glibc, with bash included, and with the apt package manager.  The official debian images are currently 123MB in size.  This image on the other hand weighs in at only 55MB / 22MB compressed.
