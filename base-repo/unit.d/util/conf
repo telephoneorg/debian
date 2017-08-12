@@ -1,1 +1,41 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -e
+
+tempdir=$(mktemp -d)
+
+mkdir -p /usr/local/bin
+
+pushd $tempdir
+    echo "Retrieving, verifying, packing, and installing dumb-init ..."
+    curl -sSL -O \
+        https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VERSION}/dumb-init_${DUMB_INIT_VERSION}_amd64 && \
+        sha256sum --check <(curl -sL https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VERSION}/sha256sums | tail -n -1) --status && \
+        chmod +x dumb-init* && \
+        upx --ultra-brute -9 dumb-init* && \
+        mv dumb-init* /dumb-init
+
+    echo "Retrieving, verifying, packing, and installing gosu ..."
+    GOSU_DOWNLOAD_URL=https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64
+    gpg --recv-key BF357DD4
+    curl -sSL -O $GOSU_DOWNLOAD_URL && \
+        gpg --no-tty --verify <(curl -sSL ${GOSU_DOWNLOAD_URL}.asc) gosu-amd64 && \
+        sha256sum --check <(curl -sSL https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/SHA256SUMS | head -1) --status && \
+        chmod +x gosu-* && \
+        upx --ultra-brute -9 gosu-* && \
+        mv gosu-* /usr/local/bin/gosu
+
+    echo "Retrieving, packing, and installing goss ..."
+    curl -sSL -O https://github.com/aelsabbahy/goss/releases/download/v${GOSS_VERSION}/goss-linux-amd64 && \
+        chmod +x goss-* && \
+        upx --ultra-brute -9 goss-* && \
+        mv goss-* /usr/local/bin/goss && \
+        mkdir -p /etc/goss
+
+    echo "Retrieving, and installing scripts ..."
+    git clone -b 0.1 --single-branch --depth 1 \
+        https://github.com/joeblackwaslike/container-utils && \
+        chmod +x container-utils/scripts/* \
+        cp container-utils/scripts/* /usr/local/bin/
+
+    popd && rm -rf $tempdir

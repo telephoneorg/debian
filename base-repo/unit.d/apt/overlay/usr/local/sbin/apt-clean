@@ -53,4 +53,6 @@ if [ "$aggressive" == "yes" ]; then
     rm -rf /usr/share/lintian/*
 fi
 
+[[ -a ~/.gnupg ]] && rm -rf ~/.gnupg
+
 exit 0

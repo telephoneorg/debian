@@ -28,4 +28,3 @@ tklx/base$ docker run -it base:$(basename $RELEASE) /bin/bash
 
 - ``builder/run`` specifies ``base`` itself as a volume so it is mount
   binded into the builder container.
-

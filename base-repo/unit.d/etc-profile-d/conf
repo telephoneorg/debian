@@ -1,4 +1,17 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+
+set -e
+
+tempdir=$(mktemp -d)
 
 mkdir -p /etc/profile.d
+
+pushd $tempdir
+    echo "Retrieving, and installing functions ..."
+    git clone -b $CONTAINER_UTILS_VERSION --single-branch --depth 1 \
+        https://github.com/joeblackwaslike/container-utils && \
+        mv container-utils/functions/* /etc/profile.d/
+
+    popd && rm -rf $tempdir
+
 dircolors -p > /etc/dircolors

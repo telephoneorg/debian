@@ -8,6 +8,7 @@ RUN set -x \
     && apt-get update \
     && dpkg -i /tmp/debs/*.deb || true \
     && apt-get -y -f install \
+    && apt-get -y install upx \
     && rm -rf /tmp/debs \
     && apt-clean --aggressive
 
@@ -17,4 +18,3 @@ COPY entrypoint /entrypoint
 ENV FAB_PATH=/turnkey/fab
 ENTRYPOINT ["/entrypoint"]
 CMD ["/bin/bash"]
-

@@ -2,14 +2,19 @@ addons:
   apt:
     packages:
     - realpath
+language: python
 services: docker
 env:
   global:
-  - DOCKER_USER=callforamerica
+  - MATRIX_BUILD=true
+  - DOCKER_USER=joeblackwaslike
   # DOCKER_PASS
   - secure: "IQG+QuyQrN7PCnU6OCNbshX0KPSWHCPRYoj7Ga0kmgR0RUk1tbYihL870iDvL2cMUcQmgZRwBQOvAvECzCA7FOtsqFvQ4RjHPTgIFyd6NWm/5Rvb6uun3yAXwJ9fl9sq0lDJdvPOyowITnltYMd1b8hASBUR/S4JDOGZItaYAnFfTE/PkIp2vOgCos/F474c86v9AeJJJTmCMGEJUI1X3hYO/KCkvWcKpLnkvm+KO/aY84LTXJu+3iZ4rq3DVms3IFFBEtH2rpUGvP4saDB1JNvEYw6VoO6ZEyJIVpOpWgq0BZGa3nQ8ilN1lMWtwWJajsqJqXG91ILR0b1tZJEQRnjPHK1hYG3S1v1J3BlKXFDEqLVKTLfOHfSMyC648+d0Z9YQBVkuXpszfYpNmj1lDCS4tN+UwOZjgsDYaXHSmiFhhEqnuSJ6H2ZSxx5iPue4crkLLWf7rpgKX/PIrxA8rv5lY+zUY6u+iNWsSyILj0w6AyvpaeZNDz3dQR3zm21vLYvcMa91Ic56EZckQPs3KjLD8ult4/qWzjT3uRE+5N8KyBXX+o5Mw4Dk/rrkZOaHo8aktzEIguOsykAz8WMq0u0F2JrqECW1cFfWHaTSBDF4+StFrWQ4jnJ4HaUcuJIY47Ubz0kpiG6ZrQEkyBjDwvFLfXM0Mg592f4NWepSLUw="
   # AUTH_TOKEN
   - secure: "YjsB3IIXa8HOr2VIILG7DkEPpEcEwk3ppVJkTOfgN3rENXMDJTgn3RZC5C/ajn98qRPCEKNoZe+bS34MeZotN2nx5ceUcqf8yznH5wYrwLQ4Ozpl+ry/4Muk/11w4dXYdx7cMHw/68M7MfLiVodBw1BYK3yllkRGJCTsyJdOaWvQgY6zcps2JL0k6dd3TTfQqMFqzj8J1cTNziMRTLH2m81I+8aCneM4LNGWQ8RqTBj7soPif/VMDmybrUW00TfwahKKyq5+qQs34OwrgygKz4YGiTRBFNrRZvoS9srwAC3j5mP/ewnmJxA1t9v1QlwUIwByxoaxuJmYBggZUUj61cMVAxzPaILCvecZSn5EwmviTmJuXUQgtOeu/6F5+Zm5CtLv1HJktw+MDC1jNWHy+cEMWDrrdAWAlsY3yoAD1Z20McRbNlNAKaWu9AmT/R115k6U8curT9Erc+0GYEKjQ5AYvDdNE6KE8eTI6xKK907N+CXAJAcRlb8aSXHNxifOkWQAx8XZE3zelIXeWY+QxYY3pG5Qk54A8DnwXuoE3KPjnShSnAZUVQ1km7zIHqRLZHGwG4UW18+pKBYNLJbzjPvtUsrQme9VQrhkmbWU3fuFXib594vAnm7rZGlpUgwOKeRVwtXZazuHir2Lef1SGwEqshC89oue5ueSM5FihWs="
+  matrix:
+  - RELEASE=debian/jessie
+  - RELEASE=debian/stretch
 notifications:
   email:
     on_success: never
@@ -22,13 +27,11 @@ notifications:
 
 before_install: source scripts/ci/environment.sh
 
-install:
-- base-repo/build-builder.sh
-- base-repo/build-rootfs.sh
-- base-repo/build-docker.sh
+install: make build
 
-script: true
+script: make test
 
 after_success:
+- ci-tag-build
+- make release
 - hub-push
-- rebuild-dependents

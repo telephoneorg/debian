@@ -120,4 +120,3 @@ $O/rootfs.tar.xz: $O/rootfs
 	tar -C $O/rootfs --numeric-owner -Jcf $O/rootfs.tar.xz .
 
 .PHONY: all clean default help
-
