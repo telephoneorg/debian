@@ -1,3 +1,12 @@
+---
+target: Makefile
+---
+
+{%- set github_user = env.get('GITHUB_USER', 'joeblackwaslike') -%}
+{% set github_org = env.get('GITHUB_ORG', env.get('GITHUB_USER', 'joeblackwaslike')) -%}
+{% set docker_user = env.get('DOCKER_USER', 'joeblackwaslike') -%}
+{% set docker_org = env.get('DOCKER_ORG', env.get('DOCKER_USER', 'joeblackwaslike')) -%}
+
 # NOTE: To use github-release, be sure GITHUB_TOKEN is defined in the
 #       environment
 
@@ -6,13 +15,13 @@ SHELL := /bin/bash
 RELEASE ?= debian/jessie
 CODENAME := $(notdir $(RELEASE))
 
-GITHUB_USER ?= joeblackwaslike
-GITHUB_ORG ?= joeblackwaslike
+GITHUB_USER ?= {{ github_user }}
+GITHUB_ORG ?= {{ github_org }}
 GITHUB_REPO := debian
 GITHUB_TAG = $(shell git tag | sort -n | tail -1)
 
-DOCKER_USER ?= joeblackwaslike
-DOCKER_ORG ?= joeblackwaslike
+DOCKER_USER ?= {{ docker_user }}
+DOCKER_ORG ?= {{ docker_org }}
 DOCKER_REPO := debian
 DOCKER_IMAGE := $(DOCKER_ORG)/$(DOCKER_REPO):$(CODENAME)
 
