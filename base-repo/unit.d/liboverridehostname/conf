@@ -11,9 +11,9 @@ apt-get install -qqy ${packages[@]}
 mkdir -p /usr/local/lib
 
 pushd $tempdir
-    echo "Retrieving, verifying, packing, and installing dumb-init ..."
+    echo "Retrieving, verifying, packing, and installing liboverridehostname $LIBOVERRIDEHOSTNAME_VERSION ..."
     curl -sSL -O \
-        https://github.com/joeblackwaslike/overridehostname/releases/download/$LIBOVERRIDEHOSTNAME_VERSION/liboverridehostname.so.1 && \
+        https://github.com/joeblackwaslike/$GITHUB_USER/releases/download/$LIBOVERRIDEHOSTNAME_VERSION/liboverridehostname.so.1 && \
         mv liboverridehostname.so* /usr/local/lib/
 
     popd && rm -rf $tempdir

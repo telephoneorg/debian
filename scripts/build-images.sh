@@ -8,7 +8,7 @@ if [[ -a $base/vars.env ]]; then
 fi
 
 if [[ ! -z $DOCKER_PASSES ]]; then
-    export DOCKER_PASS=${DOCKER_PASSES[joeblackwaslike]}
+    export DOCKER_PASS=${DOCKER_PASSES[${GITHUB_USER}]}
 fi
 
 for codename in ${BUILD_CODENAMES//,/ }; do

@@ -11,7 +11,6 @@ apt-get install -qqy ${packages[@]}
 mkdir -p /usr/local/bin
 
 pushd $tempdir
-    # sha256sum --check <(curl -sSL https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VERSION}/sha256sums | tail -n -1) --status && \
     echo "Retrieving, verifying, packing, and installing dumb-init $DUMB_INIT_VERSION ..."
     curl -sSL -O \
         https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VERSION}/dumb-init_${DUMB_INIT_VERSION}_amd64 && \
@@ -19,12 +18,8 @@ pushd $tempdir
         upx --ultra-brute -9 dumb-init* && \
         mv dumb-init* /dumb-init
 
-    # sha256sum --check <(curl -sSL https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/SHA256SUMS | head -1) --status && \
-    # gpg --no-tty --verify <(curl -sSL ${GOSU_DOWNLOAD_URL}.asc) gosu-amd64 && \
-
     echo "Retrieving, verifying, packing, and installing gosu $GOSU_VERSION ..."
     GOSU_DOWNLOAD_URL=https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64
-    # gpg --keyserver pool.sks-keyservers.net --recv-key BF357DD4
     curl -sSL -O $GOSU_DOWNLOAD_URL && \
         chmod +x gosu-* && \
         upx --ultra-brute -9 gosu-* && \
@@ -39,7 +34,7 @@ pushd $tempdir
 
     echo "Retrieving and installing scripts $CONTAINER_UTILS_VERSION ..."
     git clone -b $CONTAINER_UTILS_VERSION --depth 1 \
-        https://github.com/joeblackwaslike/container-utils && \
+        https://github.com/$GITHUB_USER/container-utils && \
         chmod +x container-utils/scripts/* && \
         cp container-utils/scripts/* /usr/local/bin/
 

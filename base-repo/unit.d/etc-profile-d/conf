@@ -14,7 +14,7 @@ mkdir -p /etc/profile.d
 pushd $tempdir
     echo "Retrieving and installing functions $CONTAINER_UTILS_VERSION ..."
     git clone -b $CONTAINER_UTILS_VERSION --depth 1 \
-        https://github.com/joeblackwaslike/container-utils && \
+        https://github.com/$GITHUB_USER/container-utils && \
         mv container-utils/functions/* /etc/profile.d/
 
     popd && rm -rf $tempdir
