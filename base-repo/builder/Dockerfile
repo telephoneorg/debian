@@ -8,7 +8,7 @@ RUN set -x \
     && apt-get update \
     && dpkg -i /tmp/debs/*.deb || true \
     && apt-get -y -f install \
-    && apt-get -y install upx \
+    && apt-get -y install upx git curl ca-certificates \
     && rm -rf /tmp/debs \
     && apt-clean --aggressive
 

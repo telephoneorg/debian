@@ -19,11 +19,11 @@ notifications:
   email:
     on_success: never
     on_failure: always
-  slack:
-    rooms:
-    - secure: "IIUF/11EoCuFcsvuZwBBJSImI4nzCEQCwi29yQVRRptT8rXqMid7I3UvAsMrzhsp4Qlp09a/rDwPKBmoZcyV3DPzvUfOU85RwaCWCBZ3AGt2Jf7evhPw54rkRBTn+XnP8xmal6TYXcWqgvhU5BjLbTZciH+j0wqMl3lL4dhBkzlYNdgfl7qg9hvBs5AL//d/z33bUMxC+XO8l7z7qzPShGX47OZ+m4YsdwIAii7Ro10ofVCGYTqrU8y02FJ/CtLay8O+kfh7/tTFQA8U3t2sMyofT6Y7T2CGL49s9R+TWavczq34zenmoW/zoTi+AYtZ6MqzdnxOUIM/pNURrOSJxDt6YHSDEH6ZnP56sJwk7uHBrT6dJk1lGe8fzwqXvmpwTgFuEcoCdbrzBwNEtm5iONTzRGWZxQH3xC7uNicNaMTVMHvqySrJ7epkC9RHz09stf0zsl3DPtF/7/K6p0Cttttp/I0ogLG1o2/xEuU1ee0eKwKGB6Q+w+++Kw8c5h419oFU+QHaqGeQEkojeiM+26R+pJlarxzlnQMog1hmqQW07ZlAjEZXxRKBxPnk7Lg1iXDAjvs9dfDhzG///Wl7jLl536qE+hUs5lzSzVJ3fjjAaGfSj+7gu66mHkItTEgbbwdu7iBEK2JN/RvAjtBLuLMRZ+KnxZRNoX2lwF950iU="
-    on_success: always
-    on_failure: always
+  # slack:
+  #   rooms:
+  #   - secure: "IIUF/11EoCuFcsvuZwBBJSImI4nzCEQCwi29yQVRRptT8rXqMid7I3UvAsMrzhsp4Qlp09a/rDwPKBmoZcyV3DPzvUfOU85RwaCWCBZ3AGt2Jf7evhPw54rkRBTn+XnP8xmal6TYXcWqgvhU5BjLbTZciH+j0wqMl3lL4dhBkzlYNdgfl7qg9hvBs5AL//d/z33bUMxC+XO8l7z7qzPShGX47OZ+m4YsdwIAii7Ro10ofVCGYTqrU8y02FJ/CtLay8O+kfh7/tTFQA8U3t2sMyofT6Y7T2CGL49s9R+TWavczq34zenmoW/zoTi+AYtZ6MqzdnxOUIM/pNURrOSJxDt6YHSDEH6ZnP56sJwk7uHBrT6dJk1lGe8fzwqXvmpwTgFuEcoCdbrzBwNEtm5iONTzRGWZxQH3xC7uNicNaMTVMHvqySrJ7epkC9RHz09stf0zsl3DPtF/7/K6p0Cttttp/I0ogLG1o2/xEuU1ee0eKwKGB6Q+w+++Kw8c5h419oFU+QHaqGeQEkojeiM+26R+pJlarxzlnQMog1hmqQW07ZlAjEZXxRKBxPnk7Lg1iXDAjvs9dfDhzG///Wl7jLl536qE+hUs5lzSzVJ3fjjAaGfSj+7gu66mHkItTEgbbwdu7iBEK2JN/RvAjtBLuLMRZ+KnxZRNoX2lwF950iU="
+  #   on_success: always
+  #   on_failure: always
 
 before_install: source scripts/ci/environment.sh
 
@@ -33,5 +33,5 @@ script: make test
 
 after_success:
 - ci-tag-build
-- make release
+# - make release
 - hub-push

@@ -6,7 +6,7 @@ SHELL := /bin/bash
 RELEASE ?= debian/jessie
 CODENAME := $(notdir $(RELEASE))
 
-GITHUB_USER := joeblackwaslike
+GITHUB_USER ?= joeblackwaslike
 GITHUB_REPO := debian
 GITHUB_TAG = $(shell git tag | sort -n | tail -1)
 
@@ -15,18 +15,18 @@ DOCKER_REPO := debian
 DOCKER_IMAGE := $(DOCKER_USER)/$(DOCKER_REPO):$(CODENAME)
 
 
-.PHONY: build-builder build-rootfs build-docker clean test release tag
-.PHONY: create-release upload-release
+.PHONY: build-builder build-paths build-rootfs build-docker build-clean clean
+.PHONY: create-release docs tag test release upload-release
 
 all: build test
 
-build: clean build-paths build-builder build-rootfs build-docker
+build: clean build-paths build-builder build-rootfs build-docker build-clean
 
 build-paths:
 	mkdir -p base-repo/build
 
 build-builder:
-	docker build -t deb-builder base-repo/builder
+	docker build -t builder base-repo/builder
 
 build-rootfs:
 	base-repo/builder/run chanko-upgrade -f
@@ -34,14 +34,22 @@ build-rootfs:
 	base-repo/builder/run make
 
 build-docker:
-	docker build -t $(DOCKER_IMAGE) base-repo
+	docker build -t $(DOCKER_IMAGE) --build-arg CODENAME=$(CODENAME) base-repo
 	docker run -i --rm $(DOCKER_IMAGE) bash -lc env
+
+build-clean:
+	[[ -d base-repo/builder/chankos/$(CODENAME)/archives ]] && \
+		rm -f base-repo/builder/chankos/$(CODENAME)/archives/*.deb
 
 clean:
 	-rm -rf base-repo/build
 
+docs:
+	tmpld templates/*.j2
+
 test:
-	echo "run tests here"
+	@docker run -d --name $(DOCKER_REPO) $(DOCKER_IMAGE) tail -f /dev/null
+	@docker exec -ti $(DOCKER_REPO) goss validate
 
 release: tag create-release upload-release
 
@@ -71,8 +79,8 @@ upload-release:
 			--name $(notdir base-repo/build/rootfs.tar.gz) \
 			--file base-repo/build/rootfs.tar.gz
 
-# push-image:
-# 	if [[ $(TRAVIS) == 'true' ]]; then \
-# 		docker login -u $(DOCKER_USER) -p $(DOCKER_PASS); \
-# 	fi
-# 	docker push $(DOCKER_IMAGE)
+push-image:
+	if [[ $(TRAVIS) == 'true' ]]; then \
+		docker login -u $(DOCKER_USER) -p $(DOCKER_PASS); \
+	fi
+	docker push $(DOCKER_IMAGE)

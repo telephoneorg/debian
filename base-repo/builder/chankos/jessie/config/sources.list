@@ -1,2 +1,2 @@
-deb http://http.debian.net/debian/ jessie main
+deb http://ftp.debian.org/debian/ jessie main
 deb http://security.debian.org/ jessie/updates main

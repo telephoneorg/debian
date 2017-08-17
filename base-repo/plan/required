@@ -43,7 +43,6 @@ libc-bin
 netbase
 netcat-openbsd
 libncursesw5
-libprocps3
 procps
 
 /* non-essential packages needed for bootstrapping */

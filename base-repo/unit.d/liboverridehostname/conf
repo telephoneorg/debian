@@ -1,8 +1,12 @@
-#!/usr/binenv bash
+#!/usr/bin/env bash
 
 set -e
 
+packages=(curl ca-certificates)
 tempdir=$(mktemp -d)
+
+apt-get update -qq
+apt-get install -qqy ${packages[@]}
 
 mkdir -p /usr/local/lib
 
@@ -13,3 +17,6 @@ pushd $tempdir
         mv liboverridehostname.so* /usr/local/lib/
 
     popd && rm -rf $tempdir
+
+apt-get purge -y --auto-remove ${packages[@]}
+apt-clean --aggressive

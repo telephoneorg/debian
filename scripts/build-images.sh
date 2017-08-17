@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-
 base=$(dirname $0)
-
 
 if [[ -a $base/vars.env ]]; then
     source $base/vars.env

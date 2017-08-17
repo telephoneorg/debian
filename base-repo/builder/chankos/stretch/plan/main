@@ -1,4 +1,5 @@
 #ifdef BASE
 #include <base/plan/required>
 #include <base/plan/base>
+#include <base/plan/stretch>
 #endif

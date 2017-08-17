@@ -1,8 +1,9 @@
 FROM scratch
 
-MAINTAINER joe <joe@valuphone.com>
+MAINTAINER Joe Black <me@joeblack.nyc>
 
-ENV     CODENAME jessie
+ARG     CODENAME
+ENV     CODENAME=${CODENAME:-jessie}
 
 LABEL   os="linux" \
         os.distro="debian" \

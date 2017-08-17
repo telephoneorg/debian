@@ -31,6 +31,9 @@ default: $O/rootfs.tar.gz
 
 all: default $O/rootfs.tar.xz $O/package.list
 
+clean:
+	-rm -rf $O/*.spec $O/*.list $O/repo $O/rootfs $O/rootfs.tar.*
+
 help:
 	@echo '=== Configurable variables'
 	@echo 'Resolution order:'
@@ -66,9 +69,6 @@ help:
 	@echo '  $(value O)/rootfs.tar.xz'
 	@echo '  $(value O)/rootfs.tar.gz (default)'
 
-clean:
-	-rm -rf $O/*.spec $O/*.list $O/repo $O/rootfs $O/rootfs.tar.*
-
 $O/required.spec: plan/required
 	fab-plan-resolve --output=$O/required.spec plan/required
 
@@ -101,17 +101,19 @@ $O/rootfs: $O/repo $O/required.list $O/base.list
 		$(shell realpath $O)/rootfs \
 		file://$(shell realpath $O)/repo
 
+	rm -f $O/rootfs/etc/apt/sources.list
 	mkdir -p $O/rootfs/dev/pts
 	echo $(CODENAME) > $O/rootfs/etc/debian_codename
 	$(foreach u,$(wildcard unit.d/*), \
 	  [ -d $(u)/overlay ] && fab-apply-overlay $(u)/overlay $O/rootfs; \
-	  [ -x $(u)/conf ] && fab-chroot $O/rootfs --script $(u)/conf; \
+	  [ -x $(u)/conf ] && fab-chroot $O/rootfs --env $(shell cut -d'=' -f1 /turnkey/tklx/base/versions.env | xargs | sed 's/ /:/g') \
+	  	--script $(u)/conf; \
 	  )
 
 	rm -f $O/rootfs/etc/hostname
 	rm -f $O/rootfs/etc/resolv.conf
-	rm -f $O/rootfs/etc/apt/sources.list
 	rm -f $O/rootfs/var/log/bootstrap.log
+	[ -d /etc/ssl/certs ] && rm -rf /etc/ssl/certs
 
 $O/rootfs.tar.gz: $O/rootfs
 	tar -C $O/rootfs --numeric-owner -zcf $O/rootfs.tar.gz .

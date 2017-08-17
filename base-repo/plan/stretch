@@ -1,0 +1,9 @@
+gnupg
+gnupg-agent
+libassuan0
+libksba8
+libnpth0
+libreadline7
+libsqlite3-0
+pinentry-curses
+readline-common
