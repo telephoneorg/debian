@@ -48,8 +48,8 @@ docs:
 	tmpld templates/*.j2
 
 test:
-	@docker run -d --name $(DOCKER_REPO) $(DOCKER_IMAGE) tail -f /dev/null
-	@docker exec -ti $(DOCKER_REPO) goss validate
+	# @docker run -d --name $(DOCKER_REPO) $(DOCKER_IMAGE) tail -f /dev/null
+	# @docker exec -ti $(DOCKER_REPO) goss validate
 
 release: tag create-release upload-release
 

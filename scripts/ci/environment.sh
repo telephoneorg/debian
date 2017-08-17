@@ -1,5 +1,7 @@
 # Helpers
 
+DEFAULT_ORG=telephone-org
+
 function get-name {
     local name=$(basename $PWD)
     if echo "$name" | grep -q docker; then
@@ -37,15 +39,19 @@ function get-tag {
     printf "${tag:-latest}"
 }
 
+function get-repo-name {
+    printf ${DOCKER_ORG:-${DOCKER_USER:=$DEFAULT_ORG}}
+}
+
 function get-user {
-    printf ${DOCKER_USER:=callforamerica}
+    printf ${DOCKER_USER:=$DEFAULT_ORG}
 }
 
 function get-docker-image {
-    local user=$(get-user)
+    local repo_name=$(get-repo-name)
     local name=$(get-name)
     local tag=$(get-tag)
-    printf "$user/$name:$tag"
+    printf "$repo_name/$name:$tag"
 }
 
 # Actions
@@ -55,21 +61,23 @@ function tag {
         printf 'Usage: %s <new-tag>\n' $0
     fi
     local new_tag="$1"
+    local repo_name=$(get-repo-name)
     local name=$(get-name)
-    local user=$(get-user)
     local image=$(get-docker-image)
-    docker tag $image $user/$name:$new_tag
+    docker tag $image $repo_name/$name:$new_tag
 }
 
 function hub-push {
+    local repo_name=$(get-repo-name)
     local name=$(get-name)
     local user=$(get-user)
+    local image=$(get-docker-image)
     if [[ -z $user || -z $DOCKER_PASS ]]; then
         printf 'DOCKER_USER/PASS environment variable not set\n'
         return 1
     fi
     docker login -u $user -p $DOCKER_PASS
-    docker push $user/$name
+    docker push $image
 }
 
 # function hub-trigger {
@@ -143,6 +151,7 @@ if [[ -f scripts/ci/vars.env ]]; then
     source scripts/ci/vars.env
 fi
 
+export REPO_NAME=$(get-repo-name)
 export NAME=$(get-name)
 export BRANCH=$(get-branch)
 export TAG=$(get-tag)
@@ -150,6 +159,7 @@ export DOCKER_USER=$(get-user)
 export DOCKER_IMAGE=$(get-docker-image)
 
 echo -e "
+REPO_NAME: $REPO_NAME
 NAME: $NAME
 BRANCH: $BRANCH
 TAG: $TAG
