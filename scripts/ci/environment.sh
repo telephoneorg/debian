@@ -94,7 +94,7 @@ function tag {
 function hub-push {
     local org=$(get-docker-org)
     local name=$(get-name)
-    local user=$(get-user)
+    local user=$(get-docker-user)
     local image=$(get-docker-image)
     if [[ -z $user || -z $DOCKER_PASS ]]; then
         printf 'DOCKER_USER/PASS environment variable not set\n'
@@ -111,7 +111,7 @@ function hub-push {
 #     fi
 #     local name=$(get-name)
 #     local tag=$(get-tag)
-#     local user=$(get-user)
+#     local user=$(get-docker-user)
 #     curl -s -X POST -H "Content-Type: application/json" \
 #     	--data '{"docker_tag": "$tag"}' \
 #     	https://registry.hub.docker.com/u/$user/$name/trigger/$BUILD_TOKEN/
