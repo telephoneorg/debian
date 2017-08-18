@@ -12,7 +12,7 @@ target: README.md
 {% set github_branch = env.get('BRANCH', 'master') -%}
 
 # Debian Base Image
-[![Build Status](https://travis-ci.org/{{ github_user }}/debian.svg?branch={{ github_branch }})](https://travis-ci.org/{{ docker_user }}/debian) [![Docker Pulls](https://img.shields.io/docker/pulls/{{ docker_user }}/debian.svg)](https://hub.docker.com/r/{{ docker_user }}/debian/) [![Github Repo](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/{{ github_org }}/{{ github_repo }})
+[![Build Status](https://travis-ci.org/{{ github_org }}/debian.svg?branch={{ github_branch }})](https://travis-ci.org/{{ docker_org }}/{{ github_repo }}) [![Docker Pulls](https://img.shields.io/docker/pulls/{{ docker_org }}/{{ docker_repo }}.svg)](https://hub.docker.com/r/{{ docker_org }}/{{ docker_repo }}/) [![Github Repo](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/{{ github_org }}/{{ github_repo }})
 
 ## Maintainer
 Joe Black | <me@joeblack.nyc> | [github](https://github.com/joeblackwaslike)

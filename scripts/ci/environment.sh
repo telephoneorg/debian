@@ -192,7 +192,7 @@ function _hub-update-readme {
     local name=$(get-name)
     local tag=$(get-docker-tag)
     local user=$(get-docker-user)
-    curl -vX PATCH "https://cloud.docker.com/v2/repositories/$org/$name/" \
+    curl -X PATCH "https://cloud.docker.com/v2/repositories/$org/$name/" \
         -u "$user:$DOCKER_PASS" \
         -H 'Content-Type: application/json' \
         -H 'Accept: application/json' \

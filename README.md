@@ -1,5 +1,5 @@
 # Debian Base Image
-[![Build Status](https://travis-ci.org//debian.svg?branch=master)](https://travis-ci.org//debian) [![Docker Pulls](https://img.shields.io/docker/pulls//debian.svg)](https://hub.docker.com/r//debian/) [![Github Repo](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/joeblackwaslike/debian)
+[![Build Status](https://travis-ci.org/joeblackwaslike/debian.svg?branch=master)](https://travis-ci.org/joeblackwaslike/debian) [![Docker Pulls](https://img.shields.io/docker/pulls/joeblackwaslike/debian.svg)](https://hub.docker.com/r/joeblackwaslike/debian/) [![Github Repo](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/joeblackwaslike/debian)
 
 ## Maintainer
 Joe Black | <me@joeblack.nyc> | [github](https://github.com/joeblackwaslike)
