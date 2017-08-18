@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+export GOSS_PATH=/usr/local/bin/goss-linux-amd64
+export GOSS_FILES_PATH=./$(dirname $0)
+
+echo -e "
+GOSS_FILES_PATH: $GOSS_FILES_PATH
+args: $@
+"
+
+if [[ ! -f $GOSS_PATH ]]; then
+    curl -L -o $GOSS_PATH \
+        https://github.com/aelsabbahy/goss/releases/download/v0.3.4/goss-linux-amd64
+    chmod +x $GOSS_PATH
+fi
+
+if [[ ! -f /usr/local/bin/dgoss ]]; then
+    curl -L -o /usr/local/bin \
+        https://github.com/aelsabbahy/goss/releases/download/v0.3.4/dgoss
+    chmod +x /usr/local/bin/dgoss
+fi
+
+dgoss run "$@"
+
+# dgoss run joeblackwaslike/debian:jessie tail -f /dev/null

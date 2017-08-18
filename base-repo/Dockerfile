@@ -10,3 +10,5 @@ LABEL   os="linux" \
         os.version="$CODENAME"
 
 ADD build/rootfs.tar.gz /
+
+RUN mkdir /goss

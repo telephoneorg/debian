@@ -1,8 +1,8 @@
 ---
 target: README.md
 ---
-{% set github_user = env.get('GITHUB_ORG', env.get('GITHUB_USER', 'joeblackwaslike')) -%}
-{% set docker_user = env.get('DOCKER_ORG', env.get('DOCKER_USER', 'joeblackwaslike')) -%}
+{% set github_user = data.get('vars')['github']['user'] -%}
+{% set docker_user = data.get('vars')['docker']['user'] -%}
 {% set github_branch = env.get('BRANCH', 'master') -%}
 
 # Debian Base Image

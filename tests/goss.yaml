@@ -1,0 +1,321 @@
+file:
+  /usr/local/bin/detect-proxy:
+    exists: true
+    mode: "0755"
+    size: 1152
+    owner: root
+    group: staff
+    filetype: file
+    sha256: a01993fbed8c752a4ba731474b32d08756b8d08fe1bb94f753c51130690226cb
+  /usr/local/bin/erlang-cookie:
+    exists: true
+    mode: "0755"
+    size: 3052
+    owner: root
+    group: staff
+    filetype: file
+    sha256: 381f498484cd0a5f6774df6174882e3c85cdb32a069cf285a4744f2ec8042928
+  /usr/local/bin/fixattrs:
+    exists: true
+    mode: "0755"
+    size: 4308
+    owner: root
+    group: staff
+    filetype: file
+    sha256: 542a834ce9fa23d579b96340b319ca2e8ceff96617002e2c4f76c1b5c5890724
+  /usr/local/bin/goss:
+    exists: true
+    mode: "0755"
+    size: 1996360
+    owner: root
+    group: root
+    filetype: file
+    sha256: 9704d2185a03839bf604787a5407bb06d27ac42e4aa800088d6c979cc93aa2e7
+  /usr/local/bin/gosu:
+    exists: true
+    mode: "0755"
+    size: 370004
+    owner: root
+    group: root
+    filetype: file
+    sha256: f3e2222bf4fe1cd82ef262ea09bc556170ed5250f4b4cff0efc6b5bad7c7eaee
+  /usr/local/bin/kube-hostname-fix:
+    exists: true
+    mode: "0755"
+    size: 4221
+    owner: root
+    group: staff
+    filetype: file
+    sha256: 51aa9c9d09dee2f4dd74c02071994dc142359cc277fd1aafb8b8873e5db4dc11
+  /usr/local/bin/kube-search-domains:
+    exists: true
+    mode: "0755"
+    size: 1567
+    owner: root
+    group: staff
+    filetype: file
+    sha256: 19d93cee2031b30c5b3f2cf2e79c69c682d8e39421fe641ddff6fb4a98b017cf
+  /usr/local/bin/path-helper:
+    exists: true
+    mode: "0755"
+    size: 1783
+    owner: root
+    group: staff
+    filetype: file
+    sha256: 320228ed1a62b17b0b15ea0e7cdbefb33a7e0ced81d9c992226b64f3a14708f1
+  /usr/local/bin/set-limits:
+    exists: true
+    mode: "0755"
+    size: 5346
+    owner: root
+    group: staff
+    filetype: file
+    sha256: 612b644ecb320fab255a2be504c620e628105c4f9813b253ae9da3da16854c1e
+  /usr/local/sbin/apt-clean:
+    exists: true
+    mode: "0755"
+    size: 1311
+    owner: root
+    group: staff
+    filetype: file
+    sha256: 4dfdc5d8b6db25bec8d40c24be3704c661583ad9964398815aa3bc659e4cc985
+  /usr/share/groff:
+    exists: false
+  /usr/share/linda:
+    exists: false
+  /var/cache/man:
+    exists: false
+  /var/log/dpkg.log:
+    exists: false
+  /etc/entrypoint:
+    exists: true
+    mode: "0644"
+    size: 154
+    owner: root
+    group: root
+    filetype: file
+    contains:
+    - "for f in /etc/entrypoint.d/*; do"
+  /etc/entrypoint.d:
+    exists: true
+    mode: "0755"
+    owner: root
+    group: root
+    filetype: directory
+  /etc/entrypoint.d/50-kube-search-domains-fix:
+    exists: true
+    mode: "0644"
+    size: 234
+    owner: root
+    group: root
+    filetype: file
+    contains:
+    - kube-search-domains add
+    - kube-search-domains remove
+  /etc/environment:
+    exists: true
+    mode: "0644"
+    size: 291
+    owner: root
+    group: root
+    filetype: file
+    contains:
+    - "for f in /etc/environment.d/*; do"
+  /etc/environment.d:
+    exists: true
+    mode: "0755"
+    owner: root
+    group: root
+    filetype: directory
+  /etc/fixattrs.d:
+    exists: true
+    mode: "0755"
+    owner: root
+    group: root
+    filetype: directory
+  /etc/paths.d:
+    exists: true
+    mode: "0755"
+    owner: root
+    group: root
+    filetype: directory
+  /etc/paths.d/10-home-bin-path:
+    exists: true
+    mode: "0644"
+    size: 6
+    owner: root
+    group: root
+    filetype: file
+    contains:
+    - ~/bin
+  /etc/profile:
+    exists: true
+    mode: "0644"
+    size: 761
+    owner: root
+    group: root
+    filetype: file
+    contains:
+    - "for i in /etc/profile.d/*.sh; do"
+  /etc/profile.d:
+    exists: true
+    mode: "0755"
+    owner: root
+    group: root
+    filetype: directory
+  /etc/profile.d/10-build-paths.sh:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+    - "export $(/usr/local/bin/path-helper)"
+  /etc/profile.d/30-shell-env.sh:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+    - TERM=xterm-256color
+    - ": ${SHELL:=/bin/bash}"
+    - export SHELL TERM
+  /etc/profile.d/40-build-functions.sh:
+    exists: true
+    mode: "0644"
+
+    owner: root
+    group: root
+    filetype: file
+    contains:
+    - "function build::apt::add-key"
+    - "function build::user::create"
+  /etc/profile.d/40-useful-functions.sh:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+    - "function kazoo::build-amqp-uri-list"
+    - "function kazoo::erts::get-version"
+  /etc/profile.d/50-kube-hostname-fix.sh:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+    - eval $(kube-hostname-fix enable)
+  /etc/profile.d/50-prompt-colors.sh:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+    - eval $(dircolors -b $HOME/.dircolors)
+    - PS1="${c_c}\$(hostname -s) ${c_g}\W${c_rst} \$ "
+    - export PS LS_COLORS
+  /etc/profile.d/60-build-environment.sh:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+    - . /etc/environment
+  /etc/profile.d/bash_completion.sh:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+  /usr/local/lib/liboverridehostname.so.1:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    # sha256:
+package:
+{{if getEnv "RELEASE" | eq "debian/jessie"}}
+  gnupg:
+    installed: true
+{{end}}
+  bash:
+    installed: true
+  bash-completion:
+    installed: true
+  iproute2:
+    installed: true
+  libncursesw5:
+    installed: true
+  mawk:
+    installed: true
+  netbase:
+    installed: true
+  netcat-openbsd:
+    installed: true
+  procps:
+    installed: true
+  sed:
+    installed: true
+  tar:
+    installed: true
+command:
+  find /usr/share/info/ -mindepth 1 | wc -l:
+    exit-status: 0
+    stdout:
+    - "0"
+    stderr: []
+    timeout: 10000
+  find /usr/share/lintian/ -mindepth 1 | wc -l:
+    exit-status: 0
+    stdout:
+    - "0"
+    stderr: []
+    timeout: 10000
+  find /usr/share/man/ -mindepth 1 | wc -l:
+    exit-status: 0
+    stdout:
+    - "0"
+    stderr: []
+    timeout: 10000
+  find /var/cache/apt/ -type f -name *.bin | wc -l:
+    exit-status: 0
+    stdout:
+    - "0"
+    stderr: []
+    timeout: 10000
+  find /var/cache/apt/archives/ -type f -name *.deb | wc -l:
+    exit-status: 0
+    stdout:
+    - "0"
+    stderr: []
+    timeout: 10000
+  find /var/cache/apt/archives/partial/ -type f -name *.deb | wc -l:
+    exit-status: 0
+    stdout:
+    - "0"
+    stderr: []
+    timeout: 10000
+  find /var/cache/debconf/ -type f -name *-old | wc -l:
+    exit-status: 0
+    stdout:
+    - "0"
+    stderr: []
+    timeout: 10000
+  find /var/lib/apt/lists/ -mindepth 1 -not -name partial | wc -l:
+    exit-status: 0
+    stdout:
+    - "0"
+    stderr: []
+    timeout: 10000
+  find /var/log/apt -mindepth 1 | wc -l:
+    exit-status: 0
+    stdout:
+    - "0"
+    stderr: []
+    timeout: 10000

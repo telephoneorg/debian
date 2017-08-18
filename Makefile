@@ -16,9 +16,9 @@ DOCKER_ORG ?= joeblackwaslike
 DOCKER_REPO := debian
 DOCKER_IMAGE := $(DOCKER_ORG)/$(DOCKER_REPO):$(CODENAME)
 
-
-.PHONY: build-builder build-paths build-rootfs build-docker build-clean clean
-.PHONY: create-release docs tag test release upload-release
+.PHONY: build-builder build-paths build-rootfs build-docker build-clean
+.PHONY: build-tests clean create-release templates tag test release
+.PHONY: upload-release
 
 all: build test
 
@@ -46,12 +46,14 @@ build-clean:
 clean:
 	-rm -rf base-repo/build
 
-docs:
-	tmpld templates/*.j2
+templates:
+	tmpld --data=templates/vars.yaml templates/*.j2
+
+build-tests:
+	dgoss edit $(DOCKER_IMAGE) tail -f /dev/null
 
 test:
-	# @docker run -d --name $(DOCKER_REPO) $(DOCKER_IMAGE) tail -f /dev/null
-	# @docker exec -ti $(DOCKER_REPO) goss validate
+	tests/run $(DOCKER_IMAGE) tail -f /dev/null
 
 release: tag create-release upload-release
 
