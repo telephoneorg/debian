@@ -1,6 +1,12 @@
+name: debian
+heading: Debian minimal base image
+description: |-
+  A minimal base image for debian.
 github:
   user: joeblackwaslike
   org: joeblackwaslike
+  repo: debian
 docker:
   user: joeblackwaslike
   org: joeblackwaslike
+  repo: debian

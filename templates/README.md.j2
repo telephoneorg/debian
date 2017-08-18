@@ -1,12 +1,18 @@
 ---
 target: README.md
 ---
-{% set github_user = data.get('vars')['github']['user'] -%}
-{% set docker_user = data.get('vars')['docker']['user'] -%}
+{% set github = data.get('vars')['github'] -%}
+{% set github_org = github['org'] -%}
+{% set github_repo = github['repo'] -%}
+
+{% set docker = data.get('vars')['docker'] -%}
+{% set docker_org = docker['org'] -%}
+{% set docker_repo = docker['repo'] -%}
+
 {% set github_branch = env.get('BRANCH', 'master') -%}
 
 # Debian Base Image
-[![Build Status](https://travis-ci.org/{{ github_user }}/debian.svg?branch={{ github_branch }})](https://travis-ci.org/{{ docker_user }}/debian) [![Docker Pulls](https://img.shields.io/docker/pulls/{{ docker_user }}/debian.svg)](https://hub.docker.com/r/{{ docker_user }}/debian/)
+[![Build Status](https://travis-ci.org/{{ github_user }}/debian.svg?branch={{ github_branch }})](https://travis-ci.org/{{ docker_user }}/debian) [![Docker Pulls](https://img.shields.io/docker/pulls/{{ docker_user }}/debian.svg)](https://hub.docker.com/r/{{ docker_user }}/debian/) [![Github Repo](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/{{ github_org }}/{{ github_repo }})
 
 ## Maintainer
 Joe Black | <me@joeblack.nyc> | [github](https://github.com/joeblackwaslike)

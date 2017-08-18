@@ -151,7 +151,6 @@ file:
   /etc/profile:
     exists: true
     mode: "0644"
-    size: 761
     owner: root
     group: root
     filetype: file

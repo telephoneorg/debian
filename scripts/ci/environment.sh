@@ -104,7 +104,7 @@ function hub-push {
     docker push $image
 }
 
-# function hub-trigger {
+# function github-tag {
 #     if [[ -z $BUILD_TOKEN ]]; then
 #         printf 'BUILD_TOKEN not set.\n'
 #         return 1
@@ -174,6 +174,32 @@ function rebuild-dependents {
     done
 }
 
+function hub-update-readme {
+    local file
+    if [[ -f README.md ]]; then
+        file=README.md
+    elif [[ -f README.rst ]]; then
+        file=README.rst
+    else
+        return 0
+    fi
+    _hub-update-readme $file
+}
+
+function _hub-update-readme {
+    local file="${1:-README.md}"
+    local org=$(get-docker-org)
+    local name=$(get-name)
+    local tag=$(get-docker-tag)
+    local user=$(get-docker-user)
+    curl -vX PATCH "https://cloud.docker.com/v2/repositories/$org/$name/" \
+        -u "$user:$DOCKER_PASS" \
+        -H 'Content-Type: application/json' \
+        -H 'Accept: application/json' \
+        -d @<(jq -MRcs '{"registry":"registry-1.docker.io","full_description": . }' $file)
+}
+
+
 if [[ -f scripts/ci/vars.env ]]; then
     source scripts/ci/vars.env
 fi
@@ -182,7 +208,6 @@ export ORG=$(get-docker-org)
 export NAME=$(get-name)
 export BRANCH=$(get-branch)
 export TAG=$(get-docker-tag)
-export DOCKER_USER=$(get-docker-user)
 export DOCKER_IMAGE=$(get-docker-image)
 
 echo -e "

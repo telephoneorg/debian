@@ -3,25 +3,28 @@ target: Makefile
 ---
 {% set github_user = data.get('vars')['github']['user'] -%}
 {% set github_org = data.get('vars')['github']['org'] -%}
+{% set github_repo = data.get('vars')['github']['repo'] -%}
+
 {% set docker_user = data.get('vars')['docker']['user'] -%}
 {% set docker_org = data.get('vars')['docker']['user'] -%}
+{% set docker_org = data.get('vars')['docker']['repo'] -%}
 
 # NOTE: To use github-release, be sure GITHUB_TOKEN is defined in the
 #       environment
 
 SHELL := /bin/bash
 
-RELEASE ?= debian/jessie
+RELEASE ?= {{ docker_repo }}/jessie
 CODENAME := $(notdir $(RELEASE))
 
 GITHUB_USER ?= {{ github_user }}
 GITHUB_ORG ?= {{ github_org }}
-GITHUB_REPO := debian
+GITHUB_REPO := {{ github_repo }}
 GITHUB_TAG = $(shell git tag | sort -n | tail -1)
 
 DOCKER_USER ?= {{ docker_user }}
 DOCKER_ORG ?= {{ docker_org }}
-DOCKER_REPO := debian
+DOCKER_REPO := {{ docker_repo }}
 DOCKER_IMAGE := $(DOCKER_ORG)/$(DOCKER_REPO):$(CODENAME)
 
 .PHONY: build-builder build-paths build-rootfs build-docker build-clean
@@ -57,12 +60,11 @@ clean:
 templates:
 	tmpld --data=templates/vars.yaml templates/*.j2
 
-build-tests:
-	dgoss edit $(DOCKER_IMAGE) tail -f /dev/null
+build-test:
+	tests/edit $(DOCKER_IMAGE) tail -f /dev/null
 
 test:
-	#tests/run $(DOCKER_IMAGE) tail -f /dev/null
-	exit 0
+	tests/run $(DOCKER_IMAGE) tail -f /dev/null
 
 release: tag create-release upload-release
 

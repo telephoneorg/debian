@@ -3,7 +3,7 @@
 
 SHELL := /bin/bash
 
-RELEASE ?= debian/jessie
+RELEASE ?= /jessie
 CODENAME := $(notdir $(RELEASE))
 
 GITHUB_USER ?= joeblackwaslike
@@ -12,8 +12,8 @@ GITHUB_REPO := debian
 GITHUB_TAG = $(shell git tag | sort -n | tail -1)
 
 DOCKER_USER ?= joeblackwaslike
-DOCKER_ORG ?= joeblackwaslike
-DOCKER_REPO := debian
+DOCKER_ORG ?= debian
+DOCKER_REPO := 
 DOCKER_IMAGE := $(DOCKER_ORG)/$(DOCKER_REPO):$(CODENAME)
 
 .PHONY: build-builder build-paths build-rootfs build-docker build-clean
@@ -53,8 +53,7 @@ build-tests:
 	dgoss edit $(DOCKER_IMAGE) tail -f /dev/null
 
 test:
-	#tests/run $(DOCKER_IMAGE) tail -f /dev/null
-	exit 0
+	tests/run $(DOCKER_IMAGE) tail -f /dev/null
 
 release: tag create-release upload-release
 
