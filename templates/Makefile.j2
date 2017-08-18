@@ -6,7 +6,7 @@ target: Makefile
 {% set github_repo = data.get('vars')['github']['repo'] -%}
 
 {% set docker_user = data.get('vars')['docker']['user'] -%}
-{% set docker_org = data.get('vars')['docker']['user'] -%}
+{% set docker_org = data.get('vars')['docker']['org'] -%}
 {% set docker_repo = data.get('vars')['docker']['repo'] -%}
 
 # NOTE: To use github-release, be sure GITHUB_TOKEN is defined in the

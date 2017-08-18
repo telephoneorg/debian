@@ -3,7 +3,7 @@
 
 SHELL := /bin/bash
 
-RELEASE ?= /jessie
+RELEASE ?= debian/jessie
 CODENAME := $(notdir $(RELEASE))
 
 GITHUB_USER ?= joeblackwaslike
@@ -12,8 +12,8 @@ GITHUB_REPO := debian
 GITHUB_TAG = $(shell git tag | sort -n | tail -1)
 
 DOCKER_USER ?= joeblackwaslike
-DOCKER_ORG ?= debian
-DOCKER_REPO := 
+DOCKER_ORG ?= joeblackwaslike
+DOCKER_REPO := debian
 DOCKER_IMAGE := $(DOCKER_ORG)/$(DOCKER_REPO):$(CODENAME)
 
 .PHONY: build-builder build-paths build-rootfs build-docker build-clean
@@ -49,8 +49,8 @@ clean:
 templates:
 	tmpld --data=templates/vars.yaml templates/*.j2
 
-build-tests:
-	dgoss edit $(DOCKER_IMAGE) tail -f /dev/null
+build-test:
+	tests/edit $(DOCKER_IMAGE) tail -f /dev/null
 
 test:
 	tests/run $(DOCKER_IMAGE) tail -f /dev/null
