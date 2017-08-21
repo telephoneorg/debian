@@ -28,6 +28,7 @@ diffutils
 dpkg
 e2fsprogs
 findutils
+gnupg
 grep
 gzip
 hostname
