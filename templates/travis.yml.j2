@@ -11,11 +11,6 @@ target: '.travis.yml'
 {% set github_token = env.get('GITHUB_TOKEN') -%}
 {% set slack_secret = env.get('TRAVIS_SLACK_SECRET') -%}
 
-{% if not github_org -%} {{ raiser('github_org not set') }} {% endif -%}
-{% if not github_user -%} {{ raiser('github_user not set') }} {% endif -%}
-{% if not docker_org -%} {{ raiser('docker_org not set') }} {% endif -%}
-{% if not docker_user -%} {{ raiser('docker_user not set') }} {% endif -%}
-
 addons:
   apt:
     packages:

@@ -12,12 +12,6 @@ target: README.md
 
 {% set github_branch = env.get('BRANCH', 'master') -%}
 
-{% if not github_org -%} {{ raiser('github_org not set') }} {% endif -%}
-{% if not github_user -%} {{ raiser('github_user not set') }} {% endif -%}
-{% if not github_repo -%} {{ raiser('github_repo not set') }} {% endif -%}
-{% if not docker_org -%} {{ raiser('docker_org not set') }} {% endif -%}
-{% if not docker_repo -%} {{ raiser('docker_repo not set') }} {% endif -%}
-
 # Debian Base Image
 [![Build Status](https://travis-ci.org/{{ github_org }}/debian.svg?branch={{ github_branch }})](https://travis-ci.org/{{ docker_org }}/{{ github_repo }}) [![Docker Pulls](https://img.shields.io/docker/pulls/{{ docker_org }}/{{ docker_repo }}.svg)](https://hub.docker.com/r/{{ docker_org }}/{{ docker_repo }}/) [![Github Repo](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/{{ github_org }}/{{ github_repo }})
 
