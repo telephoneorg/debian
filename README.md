@@ -50,8 +50,8 @@ Initialize an improved and functional shell environment and abstract complexity 
 **`/etc/profile.d/`:**
 * [10-build-paths.sh](base-repo/unit.d/etc-profile-d/overlay/etc/profile.d/10-build-paths.sh)
 * [30-shell-env.sh](base-repo/unit.d/etc-profile-d/overlay/etc/profile.d/30-shell-env.sh)
-* [40-build-functions.sh](https://github.com//container-utils/blob/master/functions/40-build-functions.sh)
-* [40-useful-functions.sh](https://github.com//container-utils/blob/master/functions/40-build-functions.sh)
+* [40-build-functions.sh](https://github.com/joeblackwaslike/container-utils/blob/master/functions/40-build-functions.sh)
+* [40-useful-functions.sh](https://github.com/joeblackwaslike/container-utils/blob/master/functions/40-build-functions.sh)
 * [50-kube-hostname-fix.sh](base-repo/unit.d/etc-profile-d/overlay/etc/profile.d/50-kube-hostname-fix.sh)
 * [50-prompt-colors.sh](base-repo/unit.d/etc-profile-d/overlay/etc/profile.d/50-prompt-colors.sh)
 * [60-build-environment.sh](base-repo/unit.d/etc-profile-d/overlay/etc/profile.d/60-build-environment.sh)
@@ -67,13 +67,13 @@ A collection of helpers and utility scripts that help simplify and standardize c
 **`/usr/local/bin/`:**
 * [gosu](https://github.com/tianon/gosu)
 * [goss](https://github.com/aelsabbahy/goss)
-* [detect-proxy](https://github.com//container-utils/blob/master/scripts/detect-proxy)
-* [erlang-cookie](https://github.com//container-utils/blob/master/scripts/erlang-cookie)
-* [fixattrs](https://github.com//container-utils/blob/master/scripts/fixattrs)
-* [kube-hostname-fix](https://github.com//container-utils/blob/master/scripts/kube-hostname-fix)
-* [kube-search-domains](https://github.com//container-utils/blob/master/scripts/kube-search-domains)
-* [path-helper](https://github.com/joeblackwaslike//blob/master/scripts/path-helper)
-* [set-limits](https://github.com/joeblackwaslike//blob/master/scripts/set-limits)
+* [detect-proxy](https://github.com/joeblackwaslike/container-utils/blob/master/scripts/detect-proxy)
+* [erlang-cookie](https://github.com/joeblackwaslike/container-utils/blob/master/scripts/erlang-cookie)
+* [fixattrs](https://github.com/joeblackwaslike/container-utils/blob/master/scripts/fixattrs)
+* [kube-hostname-fix](https://github.com/joeblackwaslike/container-utils/blob/master/scripts/kube-hostname-fix)
+* [kube-search-domains](https://github.com/joeblackwaslike/container-utils/blob/master/scripts/kube-search-domains)
+* [path-helper](https://github.com/joeblackwaslike/joeblackwaslike/blob/master/scripts/path-helper)
+* [set-limits](https://github.com/joeblackwaslike/joeblackwaslike/blob/master/scripts/set-limits)
 
 
 ### `unit.d/etc-environment-d`:
@@ -111,7 +111,7 @@ For convenience, one entry already exists, which adds `~bin` if it exists.
 This installs `liboverridehostname.so.1` into `/usr/local/lib/`.  This library is used to override hostnames in containers without requiring any capabilities.  This opens up alot of possibilities for applications that have specific hostname requirements that can't be met using some cluster managers.
 
 **Refs:**
-* liboverridehostname: [github](https://github.com//overridehostname)
+* liboverridehostname: [github](https://github.com/joeblackwaslike/overridehostname)
 
 
 ## Included Utilities and Scripts
@@ -137,7 +137,7 @@ exec gosu <user> <cmd>
 ```
 
 ### `kube-hostname-fix`
-[/usr/local/bin/kube-hostname-fix](https://github.com//container-utils/blob/master/scripts/kube-hostname-fix)
+[/usr/local/bin/kube-hostname-fix](https://github.com/joeblackwaslike/container-utils/blob/master/scripts/kube-hostname-fix)
 
 This script works with `libfakehostname` and handles making sure the correct kubernetes pod hostname is reflected by `hostname` and makes use of `libfakehostname.so.1`.  is in /etc/hosts, exporting an updated `HOSTNAME`
 
@@ -157,11 +157,11 @@ eval $(kube-hostname-fix disable)
 NOTE: *This script is automatically activated through /etc/profile.d when `KUBE_HOSTNAME_FIX`=true, so in most cases it shouldn't be necessary to include in your entrypoint script.*
 
 **Referencess:**
-* liboverridehostname: [github](https://github.com//overridehostname)
+* liboverridehostname: [github](https://github.com/joeblackwaslike/overridehostname)
 
 
 ### `kube-search-domains`
-[/usr/local/bin/kube-search-domains](https://github.com//container-utils/blob/master/scripts/kube-search-domains)
+[/usr/local/bin/kube-search-domains](https://github.com/joeblackwaslike/container-utils/blob/master/scripts/kube-search-domains)
 
 This script is used as a stop-gap measure until dns works correctly in kubernetes pods that are run with `hostNetwork: true`.  All it does is check whether the kubernetes search domains exist and if they do not, it adds them.
 
@@ -182,7 +182,7 @@ NOTE: *This script is automatically activated through /etc/entrypoint.d when `KU
 
 
 ### `fixattrs`
-[/usr/local/bin/fixattrs](https://github.com//container-utils/blob/master/scripts/fixattrs)
+[/usr/local/bin/fixattrs](https://github.com/joeblackwaslike/container-utils/blob/master/scripts/fixattrs)
 
 This script is a bash implementation of `fixattrs` from the s6 init project. Full usage @ [s6-documentation](https://github.com/just-containers/s6-overlay#fixing-ownership--permissions).  This allows you to write specification files during the build phase for ownerships and permissions to be set on container start.  It is necessary to include the `fixattrs` command in your entrypoint script because it would be much less useful to run it before the entrypoint script.  We suggest running it right before execing the app to be run.
 
@@ -193,7 +193,7 @@ fixattrs
 
 
 ### `path-helper`
-[/usr/local/bin/path-helper](https://github.com//container-utils/blob/master/scripts/path-helper)
+[/usr/local/bin/path-helper](https://github.com/joeblackwaslike/container-utils/blob/master/scripts/path-helper)
 
 Path helper allows you to write files to `/etc/paths.d` containing paths (one per line) to be added to the path of your environment.  This makes it much easier in the build script to add custom paths rather than trying to figure out the best place to add another path in the environment files.  All paths are read from these files, checked to make sure they exist, deduplicated, and added to the front of the existing `PATH`.
 
@@ -208,7 +208,7 @@ NOTE: *This script is automatically activated through /etc/profile.d, so in most
 
 
 ### `set-limits`
-[/usr/local/bin/set-limits](https://github.com//container-utils/blob/master/scripts/set-limits)
+[/usr/local/bin/set-limits](https://github.com/joeblackwaslike/container-utils/blob/master/scripts/set-limits)
 
 This tool allows you to set ulimits for a container in the convenient declarative syntax of limits config files.
 
@@ -224,7 +224,7 @@ set-limits test
 
 
 ### `detect-proxy`
-[/usr/local/bin/detect-proxy](https://github.com//container-utils/blob/master/scripts/detect-proxy)
+[/usr/local/bin/detect-proxy](https://github.com/joeblackwaslike/container-utils/blob/master/scripts/detect-proxy)
 
 Used when building a container locally, auto detects a local proxy running on the bridgeip address and/or apt-cacher proxy and sets up `http_proxy` and Apt appropriately.
 
@@ -241,7 +241,7 @@ eval $(detect-proxy disable)
 
 
 ### `erlang-cookie`
-[/usr/local/bin/erlang-cookie](https://github.com//container-utils/blob/master/scripts/erlang-cookie)
+[/usr/local/bin/erlang-cookie](https://github.com/joeblackwaslike/container-utils/blob/master/scripts/erlang-cookie)
 
 Writes the value of `ERLANG_COOKIE || insecure-cookie` to `~/.erlang-cookie`.
 
@@ -257,13 +257,13 @@ NOTE: *This script is automatically activated through /etc/profile.d when `ERLAN
 NOTE: *All of these functions are in the global environment so should be usable anywhere and in scripts that begin with `#!/bin/bash -l`. For this reason many are namespaced to prevent collisions.*
 
 ### build time
-[/etc/profile.d/40-build-functions.sh](https://github.com//container-utils/blob/master/functions/40-build-functions.sh)
+[/etc/profile.d/40-build-functions.sh](https://github.com/joeblackwaslike/container-utils/blob/master/functions/40-build-functions.sh)
 * `build::apt::get-version`
 * `build::apt::add-key`
 * `build::user::create`
 
 ### run time / entrypoint use
-[/etc/profile.d/40-useful-functions.sh](https://github.com//container-utils/blob/master/functions/40-useful-functions.sh)
+[/etc/profile.d/40-useful-functions.sh](https://github.com/joeblackwaslike/container-utils/blob/master/functions/40-useful-functions.sh)
 * `clear`
 * `container-id`
 * `get-ipv4`
@@ -346,9 +346,9 @@ NOTE: *All of these functions are in the global environment so should be usable 
 ## Using this image
 You can use this image as a base image in your dockerfile:
 ```
-FROM /debian:jessie
+FROM joeblackwaslike/debian:jessie
 
-FROM /debian:stretch
+FROM joeblackwaslike/debian:stretch
 ```
 
 Or as a lightweight disposable container for testing:
@@ -356,7 +356,7 @@ Or as a lightweight disposable container for testing:
 docker run -it --rm callforamerica/debian:jessie bash
 ```
 
-See [our repositories](https://github.com/) for numerous images that use this image as their base.
+See [our repositories](https://github.com/joeblackwaslike) for numerous images that use this image as their base.
 
 
 ## Gotchas

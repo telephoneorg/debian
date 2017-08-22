@@ -47,7 +47,7 @@ clean:
 	-rm -rf base-repo/build
 
 templates:
-	tmpld --data=templates/vars.yaml templates/*.j2
+	tmpld --data=templates/vars.yaml $(shell find templates -type f -name '*.j2' | xargs)
 
 build-test:
 	tests/edit $(DOCKER_IMAGE) tail -f /dev/null
