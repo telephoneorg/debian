@@ -25,6 +25,7 @@ coreutils
 debianutils
 dash
 diffutils
+dirmngr
 dpkg
 e2fsprogs
 findutils
