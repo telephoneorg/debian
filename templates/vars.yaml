@@ -4,9 +4,9 @@ description: |-
   A minimal base image for debian.
 github:
   user: joeblackwaslike
-  org: joeblackwaslike
+  org: telephoneorg
   repo: debian
 docker:
   user: joeblackwaslike
-  org: joeblackwaslike
+  org: telephoneorg
   repo: debian

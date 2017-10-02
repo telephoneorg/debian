@@ -1,5 +1,5 @@
 # Debian Base Image
-[![Build Status](https://travis-ci.org/joeblackwaslike/debian.svg?branch=master)](https://travis-ci.org/joeblackwaslike/debian) [![Docker Pulls](https://img.shields.io/docker/pulls/joeblackwaslike/debian.svg)](https://hub.docker.com/r/joeblackwaslike/debian/) [![Github Repo](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/joeblackwaslike/debian)
+[![Build Status](https://travis-ci.org/telephoneorg/debian.svg?branch=master)](https://travis-ci.org/telephoneorg/debian) [![Docker Pulls](https://img.shields.io/docker/pulls/telephoneorg/debian.svg)](https://hub.docker.com/r/telephoneorg/debian/) [![Github Repo](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/telephoneorg/debian)
 
 ## Maintainer
 Joe Black | <me@joeblack.nyc> | [github](https://github.com/joeblackwaslike)
@@ -346,9 +346,9 @@ NOTE: *All of these functions are in the global environment so should be usable 
 ## Using this image
 You can use this image as a base image in your dockerfile:
 ```
-FROM joeblackwaslike/debian:jessie
+FROM telephoneorg/debian:jessie
 
-FROM joeblackwaslike/debian:stretch
+FROM telephoneorg/debian:stretch
 ```
 
 Or as a lightweight disposable container for testing:
