@@ -13,7 +13,7 @@ mkdir -p /usr/local/lib
 pushd $tempdir
     echo "Retrieving, verifying, packing, and installing liboverridehostname $LIBOVERRIDEHOSTNAME_VERSION ..."
     curl -sSL -O \
-        https://github.com/$GITHUB_ORG/overridehostname/releases/download/$LIBOVERRIDEHOSTNAME_VERSION/liboverridehostname.so.1 && \
+        https://github.com/$GITHUB_ORG/overridehostname/releases/download/v$LIBOVERRIDEHOSTNAME_VERSION/liboverridehostname.so.1 && \
         grep -qv 'Not Found' liboverridehostname.so.1 && \
         mv liboverridehostname.so* /usr/local/lib/
 

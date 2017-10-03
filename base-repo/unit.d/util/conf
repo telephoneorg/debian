@@ -33,7 +33,7 @@ pushd $tempdir
         mkdir -p /etc/goss
 
     echo "Retrieving and installing scripts $CONTAINER_UTILS_VERSION ..."
-    git clone -b $CONTAINER_UTILS_VERSION --depth 1 \
+    git clone -b v$CONTAINER_UTILS_VERSION --depth 1 \
         https://github.com/$GITHUB_ORG/container-utils && \
         chmod +x container-utils/scripts/* && \
         cp container-utils/scripts/* /usr/local/bin/
