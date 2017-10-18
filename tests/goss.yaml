@@ -2,27 +2,27 @@ file:
   /usr/local/bin/detect-proxy:
     exists: true
     mode: "0755"
-    size: 1152
+    size:
+      gt: 1152
     owner: root
     group: staff
     filetype: file
-    sha256: a01993fbed8c752a4ba731474b32d08756b8d08fe1bb94f753c51130690226cb
   /usr/local/bin/erlang-cookie:
     exists: true
     mode: "0755"
-    size: 3052
+    size:
+      gt: 3000
     owner: root
     group: staff
     filetype: file
-    sha256: 381f498484cd0a5f6774df6174882e3c85cdb32a069cf285a4744f2ec8042928
   /usr/local/bin/fixattrs:
     exists: true
     mode: "0755"
-    size: 4308
+    size:
+      gt: 4000
     owner: root
     group: staff
     filetype: file
-    sha256: 542a834ce9fa23d579b96340b319ca2e8ceff96617002e2c4f76c1b5c5890724
   /usr/local/bin/goss:
     exists: true
     mode: "0755"
@@ -42,39 +42,40 @@ file:
   /usr/local/bin/kube-hostname-fix:
     exists: true
     mode: "0755"
-    size: 4221
+    size:
+      gt: 4000
     owner: root
     group: staff
     filetype: file
-    sha256: 51aa9c9d09dee2f4dd74c02071994dc142359cc277fd1aafb8b8873e5db4dc11
   /usr/local/bin/kube-search-domains:
     exists: true
     mode: "0755"
-    size: 1567
+    size:
+      gt: 1000
     owner: root
     group: staff
     filetype: file
-    sha256: 19d93cee2031b30c5b3f2cf2e79c69c682d8e39421fe641ddff6fb4a98b017cf
   /usr/local/bin/path-helper:
     exists: true
     mode: "0755"
-    size: 1783
+    size:
+      gt: 1000
     owner: root
     group: staff
     filetype: file
-    sha256: 320228ed1a62b17b0b15ea0e7cdbefb33a7e0ced81d9c992226b64f3a14708f1
   /usr/local/bin/set-limits:
     exists: true
     mode: "0755"
-    size: 5346
+    size:
+      gt: 4000
     owner: root
     group: staff
     filetype: file
-    sha256: 612b644ecb320fab255a2be504c620e628105c4f9813b253ae9da3da16854c1e
   /usr/local/sbin/apt-clean:
     exists: true
     mode: "0755"
-    size: 1311
+    size:
+      gt: 1000
     owner: root
     group: staff
     filetype: file
