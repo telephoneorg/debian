@@ -240,7 +240,6 @@ file:
     owner: root
     group: root
     filetype: file
-    # sha256:
 package:
 {{if getEnv "RELEASE" | eq "debian/jessie"}}
   gnupg:
