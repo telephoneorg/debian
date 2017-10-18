@@ -3,7 +3,7 @@ file:
     exists: true
     mode: "0755"
     size:
-      gt: 1152
+      gt: 1000
     owner: root
     group: staff
     filetype: file
@@ -26,7 +26,8 @@ file:
   /usr/local/bin/goss:
     exists: true
     mode: "0755"
-    size: 1996360
+    size:
+      gt: 1000000
     owner: root
     group: root
     filetype: file
@@ -34,7 +35,8 @@ file:
   /usr/local/bin/gosu:
     exists: true
     mode: "0755"
-    size: 370004
+    size:
+      gt: 300000
     owner: root
     group: root
     filetype: file
