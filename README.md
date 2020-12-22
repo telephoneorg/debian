@@ -1,5 +1,5 @@
 # Debian Base Image
-[![Build Status](https://travis-ci.org/telephoneorg/debian.svg?branch=master)](https://travis-ci.org/telephoneorg/debian) [![Docker Pulls](https://img.shields.io/docker/pulls/telephoneorg/debian.svg)](https://hub.docker.com/r/telephoneorg/debian/) [![Github Repo](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/telephoneorg/debian)
+[![Build Status](https://travis-ci.org/joeblackwaslike/debian.svg?branch=master)](https://travis-ci.org/joeblackwaslike/debian) [![Docker Pulls](https://img.shields.io/docker/pulls/joeblackwaslike/debian.svg)](https://hub.docker.com/r/joeblackwaslike/debian/) [![Github Repo](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/joeblackwaslike/debian)
 
 ## Maintainer
 Joe Black | <me@joeblack.nyc> | [github](https://github.com/joeblackwaslike)
@@ -346,17 +346,17 @@ NOTE: *All of these functions are in the global environment so should be usable 
 ## Using this image
 You can use this image as a base image in your dockerfile:
 ```
-FROM telephoneorg/debian:jessie
+FROM joeblackwaslike/debian:jessie
 
-FROM telephoneorg/debian:stretch
+FROM joeblackwaslike/debian:stretch
 ```
 
 Or as a lightweight disposable container for testing:
 ```bash
-docker run -it --rm callforamerica/debian:jessie bash
+docker run -it --rm joeblackwaslike/debian:jessie bash
 ```
 
-See [our repositories](https://github.com/joeblackwaslike) for numerous images that use this image as their base.
+See [telephone repositories](https://github.com/telephoneorg) for numerous images that use this image as their base.
 
 
 ## Gotchas
